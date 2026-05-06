@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>بابل - منصة الدراسة والصلاة</title>
+    
+    <!-- ======================== ملفات PWA (لتحويل الموقع إلى تطبيق) ======================== -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1b4d2e">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="بابل">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%231b4d2e'/%3E%3Ctext x='50' y='70' font-size='60' text-anchor='middle' fill='%23f3b33d'%3E🏛️%3C/text%3E%3C/svg%3E">
+    
+    <style>
+        /* جميع الأنماط السابقة محفوظة كما هي */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', 'Segoe UI', 'Tajawal', sans-serif; }
+        body { background: linear-gradient(145deg, #0d2818, #1a4a2a); min-height: 100vh; padding: 15px; }
+        .dashboard { max-width: 1300px; margin: 0 auto; background: #fef9ef; border-radius: 45px; overflow: hidden; box-shadow: 0 25px 45px rgba(0,0,0,0.4); }
+        .menu-bar { background: #1b4d2e; display: flex; flex-wrap: wrap; justify-content: center; gap: 5px; padding: 10px; border-bottom: 3px solid #f3b33d; }
+        .menu-btn { background: #2c6e3c; color: white; border: none; padding: 10px 20px; border-radius: 40px; font-size: 0.9rem; font-weight: bold; cursor: pointer; }
+        .menu-btn.active { background: #f3b33d; color: #1e3a1e; box-shadow: 0 0 0 2px white, 0 0 0 4px #f3b33d; }
+        .menu-btn:active { transform: scale(0.96); }
+        .stats-header { background: linear-gradient(135deg, #1b4d2e, #0f3a21); padding: 10px 20px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; color: white; font-weight: bold; }
+        .stat-badge { background: rgba(0,0,0,0.4); padding: 5px 12px; border-radius: 40px; font-size: 0.8rem; }
+        .prayer-bar { background: #2c5530; padding: 8px 15px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; border-bottom: 2px solid #f3b33d; font-weight: bold; }
+        .prayer-item { background: #1e3a2a; padding: 5px 12px; border-radius: 40px; color: #ffefcf; font-size: 0.8rem; }
+        .prayer-item strong { color: #f3b33d; }
+        .alert-prayer { background: #f3b33d; color: #1e3a1e; animation: pulse 1s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); background: #f3b33d; } 50% { transform: scale(1.05); background: #ff9800; } 100% { transform: scale(1); background: #f3b33d; } }
+        .marquee-container { background: #1e3a2a; padding: 6px; }
+        .marquee-quran, .marquee-tips { background: #2c5a3a; color: #ffefcf; padding: 5px; overflow: hidden; white-space: nowrap; border-radius: 30px; margin-bottom: 4px; font-size: 0.8rem; }
+        .marquee-tips { background: #000000cc; color: #ffeb3b; }
+        .marquee-quran div, .marquee-tips div { display: inline-block; animation: scrollText 45s linear infinite; padding-right: 100%; }
+        @keyframes scrollText { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
+        .main-header { background: #1b4d2e; padding: 12px; text-align: center; color: #ffefcf; }
+        .main-header h1 { font-size: 1.4rem; display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap; }
+        .points-box { background: #f3b33d; color: #1e3a1e; padding: 4px 15px; border-radius: 40px; font-size: 1rem; }
+        .clock { font-size: 0.7rem; margin-top: 5px; }
+        .page { display: none; padding: 15px; }
+        .page.active-page { display: block; }
+        .subjects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 14px; margin-top: 10px; }
+        .subject-card { background: white; border-radius: 25px; padding: 12px; text-align: center; border: 1px solid #ffd966; cursor: pointer; }
+        .subject-card.completed { background: #c8e6c9; border: 2px solid #2e7d32; }
+        .subject-title { font-weight: bold; font-size: 1rem; margin-bottom: 5px; }
+        .complete-action { background: #4caf50; color: white; padding: 5px; border-radius: 30px; font-size: 0.65rem; margin-top: 8px; width: 100%; border: none; cursor: pointer; }
+        .complete-action.disabled { background: #2e7d32; opacity: 0.7; cursor: default; }
+        .custom-table-container { background: white; border-radius: 20px; padding: 15px; margin-top: 15px; }
+        .custom-table { width: 100%; border-collapse: collapse; }
+        .custom-table th, .custom-table td { border: 2px solid #cfb87c; padding: 8px; text-align: center; background: #fffff2; font-size: 0.75rem; }
+        .custom-table th { background: #e9dbba; }
+        .editable-cell { background: #fff2da; cursor: text; }
+        .editable-cell:focus { background: #ffe0a3; outline: 2px solid #f3b33d; }
+        .table-controls { display: flex; gap: 8px; justify-content: center; margin-top: 10px; flex-wrap: wrap; }
+        .note-box { background: #efe2c1; padding: 8px; border-radius: 15px; margin-top: 10px; font-size: 0.7rem; }
+        .week-table { width: 100%; border-collapse: collapse; margin: 10px 0; }
+        .week-table th, .week-table td { border: 1px solid #c0a86a; padding: 8px; font-size: 0.7rem; background: #fffef5; }
+        .week-controls { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-top: 10px; }
+        .history-list { max-height: 400px; overflow-y: auto; }
+        .history-item { background: white; border-radius: 20px; padding: 12px; margin-bottom: 10px; border-right: 5px solid #4caf50; }
+        .history-item .subject { font-weight: bold; font-size: 1rem; }
+        .history-item .date { font-size: 0.7rem; color: #7f6b3c; margin-top: 5px; }
+        .settings-group { background: white; border-radius: 25px; padding: 20px; margin-bottom: 15px; }
+        .settings-group label { display: block; margin: 10px 0 5px; font-weight: bold; }
+        .settings-group input { width: 100%; padding: 10px; border-radius: 30px; border: 1px solid #cfb87c; font-size: 1rem; }
+        .prayer-card { background: white; border-radius: 30px; padding: 20px; margin-bottom: 15px; text-align: center; }
+        .prayer-time { font-size: 2rem; font-weight: bold; color: #1b4d2e; margin: 10px 0; }
+        .next-prayer { background: #f3b33d; padding: 15px; border-radius: 30px; margin-top: 15px; }
+        .ayah-footer { background: #1e4d2e; color: #ffefcf; text-align: center; padding: 8px; margin-top: 15px; border-radius: 35px; font-size: 0.75rem; }
+        footer { background: #d9c48b; text-align: center; padding: 8px; font-size: 0.6rem; }
+        button { background: #f3b33d; border: none; padding: 5px 12px; border-radius: 40px; cursor: pointer; margin: 2px; }
+        button:active { transform: scale(0.96); }
+        @media (max-width: 600px) {
+            .menu-btn { padding: 6px 12px; font-size: 0.7rem; }
+            .subject-title { font-size: 0.85rem; }
+            .prayer-time { font-size: 1.2rem; }
+        }
+        /* إضافة زر التثبيت */
+        .install-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #4caf50;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            display: none;
+        }
+        .install-btn.show { display: block; }
+    </style>
+</head>
+<body>
+
+<!-- زر تثبيت التطبيق -->
+<div id="installBtn" class="install-btn">📱 تثبيت التطبيق</div>
+
+<div class="dashboard">
+    <div class="menu-bar">
+        <button class="menu-btn active" data-page="main">🏠 الرئيسية</button>
+        <button class="menu-btn" data-page="prayer">🕌 الصلاة</button>
+        <button class="menu-btn" data-page="weekly">📅 الأسبوعي</button>
+        <button class="menu-btn" data-page="history">📜 الإنجازات</button>
+        <button class="menu-btn" data-page="settings">⚙️ الإعدادات</button>
+    </div>
+    
+    <div class="stats-header">
+        <span class="stat-badge">📅 أسبوعي: <span id="weeklyGoalDisplay">0</span>/<span id="weeklyTargetDisplay">5</span></span>
+        <span class="stat-badge">🌙 شهري: <span id="monthlyGoalDisplay">0</span>/<span id="monthlyTargetDisplay">20</span></span>
+        <span class="stat-badge">🎯 اليوم: <span id="dailyGoalDisplay">0</span>/3</span>
+    </div>
+    
+    <div class="prayer-bar" id="prayerBar">
+        <span class="prayer-item">🕌 الظهر: <strong id="dhuhrTime">--:--</strong></span>
+        <span class="prayer-item">🌙 المغرب: <strong id="maghribTime">--:--</strong></span>
+        <span class="prayer-item" id="nextPrayerAlert">⏳ يتبقى للصلاة القادمة: --:--</span>
+    </div>
+    
+    <div class="marquee-container">
+        <div class="marquee-quran"><div id="quranMarquee"></div></div>
+        <div class="marquee-tips"><div id="tipsMarquee"></div></div>
+    </div>
+    
+    <div class="main-header">
+        <h1>🏛️ بابل <span class="points-box" id="pointsValue">🏆 0 نقطة</span></h1>
+        <div class="clock" id="currentTime"></div>
+        <div class="timer-section" style="margin-top:5px;">
+            <span class="timer-display" style="background:#000000aa; padding:3px 10px; border-radius:30px; font-family:monospace;" id="timerScreen">00:00:00</span>
+            <button id="timerStartBtn">▶️</button>
+            <button id="timerPauseBtn">⏸️</button>
+            <button id="timerResetBtn">🔄</button>
+            <span id="miniTipText" style="margin-right:10px; font-size:0.7rem;"></span>
+        </div>
+    </div>
+    
+    <div id="mainPage" class="page active-page">
+        <div class="subjects-nav" style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 15px;" id="subjectsTabs"></div>
+        <div class="subjects-grid" id="subjectsCards"></div>
+        <div id="customTableContainer" class="custom-table-container"></div>
+    </div>
+    
+    <div id="prayerPage" class="page">
+        <div class="prayer-card">
+            <h3 style="color:#2a5c3e;">🕌 مواقيت الصلاة في بابل</h3>
+            <div class="prayer-time" id="fullPrayerTimes"></div>
+            <div class="next-prayer" id="nextPrayerDetails">
+                <strong>الصلاة القادمة:</strong> <span id="nextPrayerName">--</span><br>
+                <strong>الوقت المتبقي:</strong> <span id="remainingTime">--:--</span>
+            </div>
+        </div>
+        <div class="prayer-card">
+            <h4 style="color:#2a5c3e;">📿 أذكار بعد الصلاة</h4>
+            <p style="margin:10px 0;">• سبحان الله (33 مرة) • الحمد لله (33 مرة) • الله أكبر (34 مرة)</p>
+            <p>• آية الكرسي • قل هو الله أحد (3 مرات)</p>
+        </div>
+        <button id="testAlertBtn" style="background:#ff9800;">🔔 تجربة التنبيه</button>
+    </div>
+    
+    <div id="weeklyPage" class="page">
+        <h4 style="color:#2a5c3e; margin-bottom:10px;">📅 خطتي الأسبوعية</h4>
+        <table class="week-table" id="weeklyPlannerTable"><thead id="weekDaysHeader"></thead><tbody id="weekTasksBody"></tbody></table>
+        <div class="week-controls">
+            <button id="addRowWeeklyBtn" style="background:#4caf50; color:white;">➕ إضافة صف</button>
+            <button id="exportWeeklyBtn" style="background:#2196f3; color:white;">📥 تحميل</button>
+            <button id="importWeeklyBtn" style="background:#ff9800; color:white;">📤 استيراد</button>
+            <button id="resetWeeklyBtn" style="background:#7f5539; color:white;">🔄 إعادة ضبط</button>
+        </div>
+        <input type="file" id="weeklyImportFile" style="display:none;" accept=".json">
+    </div>
+    
+    <div id="historyPage" class="page">
+        <h4 style="color:#2a5c3e; margin-bottom:15px;">📜 تاريخ المواد المنجزة</h4>
+        <div id="historyList" class="history-list"></div>
+        <button id="clearHistoryBtn" style="background:#b3432c; color:white; margin-top:10px;">🗑️ مسح السجل</button>
+    </div>
+    
+    <div id="settingsPage" class="page">
+        <div class="settings-group">
+            <h4 style="color:#2a5c3e;">🎯 تعديل الأهداف</h4>
+            <label>الهدف الأسبوعي</label>
+            <input type="number" id="weeklyTargetInput" min="1" max="50">
+            <label>الهدف الشهري</label>
+            <input type="number" id="monthlyTargetInput" min="1" max="200">
+            <button id="saveTargetsBtn" style="background:#4caf50; color:white;">💾 حفظ</button>
+        </div>
+        <div class="settings-group">
+            <h4 style="color:#2a5c3e;">🔄 إعادة ضبط</h4>
+            <button id="resetAchievementsAction" style="background:#ff9800;">🔄 إعادة ضبط المواد المكتملة</button>
+            <button id="resetEverythingAction" style="background:#b3432c; color:white;">🗑️ إعادة تعيين الكل</button>
+        </div>
+    </div>
+    
+    <div class="ayah-footer" id="ayahContainer">﴿ إِنَّ الصَّلَاةَ كَانَتْ عَلَى الْمُؤْمِنِينَ كِتَابًا مَّوْقُوتًا ﴾</div>
+    <footer>📱 تطبيق بابل - يعمل بدون إنترنت • حفظ تلقائي • تذكير الصلاة</footer>
+</div>
+
+<script>
+    // ======================== Service Worker (لجعل التطبيق يعمل بدون إنترنت) ========================
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js').then(function(reg) {
+            console.log('Service Worker registered');
+        }).catch(function(err) {
+            console.log('Service Worker registration failed:', err);
+        });
+    }
+    
+    // ======================== زر تثبيت التطبيق ========================
+    let deferredPrompt;
+    const installBtn = document.getElementById('installBtn');
+    
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        installBtn.classList.add('show');
+    });
+    
+    installBtn.addEventListener('click', async () => {
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            if (outcome === 'accepted') {
+                console.log('User accepted the install prompt');
+            }
+            deferredPrompt = null;
+            installBtn.classList.remove('show');
+        }
+    });
+    
+    // ======================== أوقات الصلاة ========================
+    function getPrayerTimes() {
+        const now = new Date();
+        let dhuhrHour = 12, dhuhrMinute = 10;
+        let maghribHour = 18, maghribMinute = 45;
+        const month = now.getMonth();
+        if (month >= 5 && month <= 8) { maghribHour = 19; maghribMinute = 15; }
+        else if (month >= 10 || month <= 1) { maghribHour = 17; maghribMinute = 50; }
+        return { dhuhr: { hour: dhuhrHour, minute: dhuhrMinute }, maghrib: { hour: maghribHour, minute: maghribMinute } };
+    }
+    
+    function updatePrayerTimes() {
+        const now = new Date();
+        const times = getPrayerTimes();
+        document.getElementById("dhuhrTime").innerHTML = `${times.dhuhr.hour.toString().padStart(2,'0')}:${times.dhuhr.minute.toString().padStart(2,'0')}`;
+        document.getElementById("maghribTime").innerHTML = `${times.maghrib.hour.toString().padStart(2,'0')}:${times.maghrib.minute.toString().padStart(2,'0')}`;
+        document.getElementById("fullPrayerTimes").innerHTML = `🕌 الظهر: ${times.dhuhr.hour.toString().padStart(2,'0')}:${times.dhuhr.minute.toString().padStart(2,'0')}<br>🌙 المغرب: ${times.maghrib.hour.toString().padStart(2,'0')}:${times.maghrib.minute.toString().padStart(2,'0')}`;
+        
+        const currentTotal = now.getHours() * 60 + now.getMinutes();
+        const dhuhrTotal = times.dhuhr.hour * 60 + times.dhuhr.minute;
+        const maghribTotal = times.maghrib.hour * 60 + times.maghrib.minute;
+        
+        let nextPrayer, nextPrayerName, remaining;
+        if (currentTotal < dhuhrTotal) { nextPrayer = dhuhrTotal; nextPrayerName = "صلاة الظهر"; remaining = dhuhrTotal - currentTotal; }
+        else if (currentTotal < maghribTotal) { nextPrayer = maghribTotal; nextPrayerName = "صلاة المغرب"; remaining = maghribTotal - currentTotal; }
+        else { nextPrayer = dhuhrTotal + 1440; nextPrayerName = "صلاة الظهر (غداً)"; remaining = (dhuhrTotal + 1440) - currentTotal; }
+        
+        const remainingHours = Math.floor(remaining / 60);
+        const remainingMinutes = remaining % 60;
+        document.getElementById("nextPrayerName").innerHTML = nextPrayerName;
+        document.getElementById("remainingTime").innerHTML = `${remainingHours.toString().padStart(2,'0')}:${remainingMinutes.toString().padStart(2,'0')}`;
+        
+        const alertSpan = document.getElementById("nextPrayerAlert");
+        if (remaining <= 10 && remaining > 0 && nextPrayerName !== "صلاة الظهر (غداً)") {
+            alertSpan.innerHTML = `⚠️ تنبيه: ${nextPrayerName} بعد ${remainingMinutes} دقيقة ⚠️`;
+            alertSpan.classList.add("alert-prayer");
+            if (remaining === 10 || remaining === 5 || remaining === 1) { playPrayerAlert(); showToast(`🔔 تذكير: ${nextPrayerName} بعد ${remainingMinutes} دقيقة`); }
+        } else { alertSpan.innerHTML = `⏳ يتبقى للصلاة القادمة: ${remainingHours.toString().padStart(2,'0')}:${remainingMinutes.toString().padStart(2,'0')}`; alertSpan.classList.remove("alert-prayer"); }
+        setTimeout(updatePrayerTimes, 60000);
+    }
+    
+    function playPrayerAlert() {
+        if (!audioCtx) initAudio();
+        if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+        if (!audioCtx) return;
+        try { const now = audioCtx.currentTime; const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain(); osc.connect(gain); gain.connect(audioCtx.destination); osc.frequency.value = 440; gain.gain.value = 0.15; gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.5); osc.start(); osc.stop(now + 0.5); } catch(e) {}
+    }
+    
+    // ======================== المواد والبيانات ========================
+    const MATERIALS = [
+        { id: "islamic", name: "التربية الإسلامية", hasCustomTable: false },
+        { id: "physics", name: "الفيزياء", hasCustomTable: false },
+        { id: "math", name: "الرياضيات", hasCustomTable: true },
+        { id: "chemistry", name: "الكيمياء", hasCustomTable: true },
+        { id: "biology", name: "الأحياء", hasCustomTable: true },
+        { id: "arabic", name: "اللغة العربية", hasCustomTable: true },
+        { id: "english", name: "الانكليزي", hasCustomTable: true }
+    ];
+    
+    const ISLAMIC_TABLE = `<h3>🕌 التربية الإسلامية</h3><table class="custom-table"><thead><th>الوقت</th><th>النشاط</th></thead><tbody>
+    <tr><td style="font-weight:bold;">8:00</td><td>متابعة محاضرة الأستاذ ساجد (30-50 د). <strong>بدأ الحفظ</strong></td></tr>
+    <tr><td style="font-weight:bold;">9:45</td><td>مراجعة سريعة للوضوح. <strong>التتبع مع شرح الأستاذ والتركيز</strong></td></tr>
+    </tbody></table><div class="note-box">📌 يجب الانتهاء من موضوع أسبوعياً.</div>`;
+    
+    const PHYSICS_TABLE = `<h3>⚛️ الفيزياء</h3><table class="custom-table"><thead><th>التوقيت</th><th>المهام الدراسية</th></thead><tbody>
+    <tr><td style="font-weight:bold;">2:00</td><td>فتح محاضرة على السوداني + فقه الموضوع والشرح + كتابة في الدفتر</td></tr>
+    <tr><td style="font-weight:bold;">3:30</td><td>مراجعة + اختبار من خلال قناة الأستاذ في تلكرام + حفظ</td></tr>
+    <tr><td style="font-weight:bold;">8:00</td><td>فتح محاضرة على السوداني الثانية + فهم الموضوع والشرح + كتابة في الدفتر</td></tr>
+    <tr><td style="font-weight:bold;">9:30</td><td>مراجعة + اختبار من خلال قناة الأستاذ في تلكرام + حفظ (انتهت الساعات)</td></tr>
+    </tbody></table><div class="note-box">🧪 يومين أساسيين للفيزياء أسبوعياً.</div>`;
+    
+    let customTablesData = {};
+    function loadCustomTablesData() {
+        const saved = localStorage.getItem("customTablesData");
+        if (saved) customTablesData = JSON.parse(saved);
+        else MATERIALS.forEach(m => { if (m.hasCustomTable) customTablesData[m.id] = { headers: ["الموضوع", "المهمة", "ملاحظات"], rows: [["الوحدة الأولى", "قراءة وفهم", "حل الأسئلة"], ["الوحدة الثانية", "مراجعة وحفظ", "اختبار"]] }; });
+    }
+    function saveCustomTablesData() { localStorage.setItem("customTablesData", JSON.stringify(customTablesData)); }
+    
+    function renderCustomTable(materialId, materialName) {
+        const container = document.getElementById("customTableContainer");
+        if (!container) return;
+        if (materialId === "islamic") { container.innerHTML = ISLAMIC_TABLE; return; }
+        if (materialId === "physics") { container.innerHTML = PHYSICS_TABLE; return; }
+        let data = customTablesData[materialId];
+        if (!data) { data = { headers: ["الموضوع", "المهمة", "ملاحظات"], rows: [["", "", ""]] }; customTablesData[materialId] = data; saveCustomTablesData(); }
+        let html = `<h3>📘 ${materialName} - جدول قابل للتخصيص</h3><table class="custom-table" id="customTable_${materialId}"><thead><tr>${data.headers.map(h => `<th>${h}</th>`).join('')}<th style="width:50px;">حذف</th></tr></thead><tbody id="customTableBody_${materialId}">`;
+        for (let i = 0; i < data.rows.length; i++) {
+            html += `<tr>`;
+            for (let j = 0; j < data.headers.length; j++) html += `<td class="editable-cell" contenteditable="true" data-row="${i}" data-col="${j}" data-material="${materialId}">${data.rows[i][j] || ''}</td>`;
+            html += `<td><button class="delete-row-btn" data-row="${i}" data-material="${materialId}" style="background:#c62828; color:white; border:none; padding:4px 10px; border-radius:30px;">🗑️</button></td></tr>`;
+        }
+        html += `</tbody></table><div class="table-controls"><button id="addColumnBtn_${materialId}" style="background:#2196f3; color:white;">➕ إضافة عمود</button><button id="addRowBtn_${materialId}" style="background:#4caf50; color:white;">➕ إضافة صف</button><button id="resetTableBtn_${materialId}" style="background:#7f5539; color:white;">🔄 إعادة ضبط</button></div><div class="note-box">✨ يمكنك تعديل النص مباشرة بالضغط على الخانة • الحفظ تلقائي</div>`;
+        container.innerHTML = html;
+        
+        document.querySelectorAll(`.editable-cell[data-material="${materialId}"]`).forEach(cell => {
+            cell.addEventListener("blur", function() {
+                const row = parseInt(this.getAttribute("data-row")), col = parseInt(this.getAttribute("data-col"));
+                if (customTablesData[materialId] && customTablesData[materialId].rows[row]) { customTablesData[materialId].rows[row][col] = this.innerText; saveCustomTablesData(); }
+            });
+        });
+        document.querySelectorAll(`.delete-row-btn[data-material="${materialId}"]`).forEach(btn => {
+            btn.addEventListener("click", function() {
+                const row = parseInt(this.getAttribute("data-row"));
+                customTablesData[materialId].rows.splice(row, 1);
+                if (customTablesData[materialId].rows.length === 0) customTablesData[materialId].rows = [["", "", ""]];
+                saveCustomTablesData(); renderCustomTable(materialId, materialName);
+            });
+        });
+        const addRowBtn = document.getElementById(`addRowBtn_${materialId}`);
+        if (addRowBtn) addRowBtn.onclick = () => { customTablesData[materialId].rows.push(Array(customTablesData[materialId].headers.length).fill("")); saveCustomTablesData(); renderCustomTable(materialId, materialName); };
+        const addColBtn = document.getElementById(`addColumnBtn_${materialId}`);
+        if (addColBtn) addColBtn.onclick = () => { customTablesData[materialId].headers.push("عمود جديد"); for (let i = 0; i < customTablesData[materialId].rows.length; i++) customTablesData[materialId].rows[i].push(""); saveCustomTablesData(); renderCustomTable(materialId, materialName); };
+        const resetBtn = document.getElementById(`resetTableBtn_${materialId}`);
+        if (resetBtn) resetBtn.onclick = () => { customTablesData[materialId] = { headers: ["الموضوع", "المهمة", "ملاحظات"], rows: [["الوحدة الأولى", "قراءة وفهم", "حل الأسئلة"], ["الوحدة الثانية", "مراجعة وحفظ", "اختبار"]] }; saveCustomTablesData(); renderCustomTable(materialId, materialName); showToast("🔄 تم إعادة ضبط الجدول"); };
+    }
+    
+    // باقي الدوال كما هي (لعدم التكرار، تم اختصارها ولكنها موجودة في الكود الكامل)
+    let totalPoints = 0, completedStatus = {}, todayCompleted = [], weekCompleted = 0, monthCompleted = 0, weeklyTarget = 5, monthlyTarget = 20, historyLog = [];
+    const TODAY_KEY = () => new Date().toLocaleDateString('en-CA');
+    const WEEK_KEY = () => { let d=new Date(), s=new Date(d.getFullYear(),0,1); return `${d.getFullYear()}-W${Math.ceil((d-s)/86400000/7)}`; };
+    const MONTH_KEY = () => new Date().toLocaleDateString('en-CA').slice(0,7);
+    
+    function loadAll() {
+        totalPoints = parseInt(localStorage.getItem("pointsMain")) || 0;
+        let saved = localStorage.getItem("completedMain");
+        if (saved) completedStatus = JSON.parse(saved);
+        MATERIALS.forEach(m => { if (completedStatus[m.name] === undefined) completedStatus[m.name] = false; });
+        todayCompleted = JSON.parse(localStorage.getItem(`daily_${TODAY_KEY()}`)) || [];
+        weekCompleted = parseInt(localStorage.getItem(`weekly_${WEEK_KEY()}`)) || 0;
+        monthCompleted = parseInt(localStorage.getItem(`monthly_${MONTH_KEY()}`)) || 0;
+        weeklyTarget = parseInt(localStorage.getItem("weeklyTargetSetting")) || 5;
+        monthlyTarget = parseInt(localStorage.getItem("monthlyTargetSetting")) || 20;
+        historyLog = JSON.parse(localStorage.getItem("historyLog")) || [];
+        loadCustomTablesData();
+        updateUI();
+        checkMidnightReset();
+    }
+    function saveAll() { localStorage.setItem("pointsMain", totalPoints); localStorage.setItem("completedMain", JSON.stringify(completedStatus)); localStorage.setItem(`daily_${TODAY_KEY()}`, JSON.stringify(todayCompleted)); localStorage.setItem(`weekly_${WEEK_KEY()}`, weekCompleted); localStorage.setItem(`monthly_${MONTH_KEY()}`, monthCompleted); localStorage.setItem("weeklyTargetSetting", weeklyTarget); localStorage.setItem("monthlyTargetSetting", monthlyTarget); localStorage.setItem("historyLog", JSON.stringify(historyLog)); }
+    let lastDate = TODAY_KEY();
+    function checkMidnightReset() { const currentDate = TODAY_KEY(); if (currentDate !== lastDate) { lastDate = currentDate; todayCompleted = []; saveAll(); updateUI(); showToast("🕛 تم تصفير المهام اليومية"); } setTimeout(checkMidnightReset, 60000); }
+    function updateUI() { document.getElementById("pointsValue").innerHTML = `🏆 ${totalPoints} نقطة`; document.getElementById("weeklyGoalDisplay").innerHTML = weekCompleted; document.getElementById("monthlyGoalDisplay").innerHTML = monthCompleted; document.getElementById("dailyGoalDisplay").innerHTML = todayCompleted.length; document.getElementById("weeklyTargetDisplay").innerHTML = weeklyTarget; document.getElementById("monthlyTargetDisplay").innerHTML = monthlyTarget; document.getElementById("weeklyTargetInput").value = weeklyTarget; document.getElementById("monthlyTargetInput").value = monthlyTarget; renderCards(); renderHistory(); updateActiveTab(); }
+    function addToHistory(subjectName) { const now = new Date(); const dateStr = now.toLocaleDateString('ar-IQ', { year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit' }); historyLog.unshift({ subject: subjectName, date: dateStr }); if (historyLog.length > 100) historyLog.pop(); saveAll(); renderHistory(); }
+    function renderHistory() { const container = document.getElementById("historyList"); if (!container) return; if (historyLog.length === 0) { container.innerHTML = '<div style="text-align:center; padding:20px;">لا توجد إنجازات بعد</div>'; return; } container.innerHTML = historyLog.map(item => `<div class="history-item"><div class="subject">✅ ${item.subject}</div><div class="date">📅 ${item.date}</div></div>`).join(''); }
+    function clearHistory() { historyLog = []; saveAll(); renderHistory(); showToast("🗑️ تم مسح السجل"); }
+    function completeMaterial(name) { if (completedStatus[name]) return false; completedStatus[name] = true; totalPoints += 10; if (!todayCompleted.includes(name)) todayCompleted.push(name); weekCompleted = Math.min(weekCompleted + 1, weeklyTarget); monthCompleted = Math.min(monthCompleted + 1, monthlyTarget); addToHistory(name); saveAll(); updateUI(); playSuccess(); showToast(`🎉 +10 نقاط! تم إنجاز ${name}`); return true; }
+    function resetAchievements() { totalPoints = 0; MATERIALS.forEach(m => completedStatus[m.name] = false); todayCompleted = []; weekCompleted = 0; monthCompleted = 0; historyLog = []; saveAll(); updateUI(); playSuccess(); showToast("🔄 تم إعادة ضبط المواد المكتملة"); if (activeMaterial) renderCustomTable(activeMaterial.id, activeMaterial.name); }
+    function resetEverything() { resetAchievements(); showToast("🗑️ تم إعادة تعيين الكل"); }
+    function saveTargets() { weeklyTarget = parseInt(document.getElementById("weeklyTargetInput").value) || 5; monthlyTarget = parseInt(document.getElementById("monthlyTargetInput").value) || 20; if (weeklyTarget<1) weeklyTarget=1; if (monthlyTarget<1) monthlyTarget=1; saveAll(); updateUI(); showToast("💾 تم حفظ الأهداف"); }
+    let activeMaterial = { id: "physics", name: "الفيزياء" };
+    function showMaterial(materialId, materialName) { activeMaterial = { id: materialId, name: materialName }; renderCustomTable(materialId, materialName); updateActiveTab(); }
+    function renderCards() { const container = document.getElementById("subjectsCards"); if (!container) return; container.innerHTML = ""; MATERIALS.forEach(mat => { const done = completedStatus[mat.name]; const card = document.createElement("div"); card.className = `subject-card ${done ? 'completed' : ''}`; card.innerHTML = `<div class="subject-title">${mat.name}</div><div style="font-size:1.2rem;">${done ? '✅' : '📖'}</div><button class="complete-action ${done ? 'disabled' : ''}">${done ? 'تم الإنجاز ✓' : '✔️ إكمال المادة'}</button>`; card.onclick = (e) => { if (e.target.tagName !== 'BUTTON') { playClick(); showMaterial(mat.id, mat.name); } }; card.querySelector('.complete-action').onclick = (e) => { e.stopPropagation(); if (!completedStatus[mat.name]) completeMaterial(mat.name); else showToast(`📚 ${mat.name} مكتملة مسبقاً!`); }; container.appendChild(card); }); }
+    function renderTabs() { const tabsDiv = document.getElementById("subjectsTabs"); if (!tabsDiv) return; tabsDiv.innerHTML = ""; MATERIALS.forEach(mat => { const btn = document.createElement("div"); btn.style.background = "#2c6e3c"; btn.style.color = "white"; btn.style.padding = "5px 15px"; btn.style.borderRadius = "40px"; btn.style.cursor = "pointer"; btn.style.fontSize = "0.75rem"; btn.innerText = mat.name; btn.onclick = () => { playClick(); showMaterial(mat.id, mat.name); }; tabsDiv.appendChild(btn); }); }
+    function updateActiveTab() { document.querySelectorAll("#subjectsTabs div").forEach(btn => { const material = MATERIALS.find(m => m.name === btn.innerText); if (material && material.id === activeMaterial.id) { btn.style.background = "#f3b33d"; btn.style.color = "#1e3a1e"; } else { btn.style.background = "#2c6e3c"; btn.style.color = "white"; } }); }
+    
+    let timerInt = null, timerSec = 0, timerRun = false;
+    function updateTimerDisplay() { let h=Math.floor(timerSec/3600), m=Math.floor((timerSec%3600)/60), s=timerSec%60; document.getElementById("timerScreen").innerText=`${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`; }
+    function startTimer() { if(timerInt) clearInterval(timerInt); timerRun=true; timerInt=setInterval(()=>{ if(timerRun){ timerSec++; updateTimerDisplay(); } },1000); playClick(); showToast("⏳ بدأ المؤقت"); }
+    function pauseTimer() { if(timerInt){ clearInterval(timerInt); timerInt=null; timerRun=false; playClick(); showToast("⏸️ توقف"); } }
+    function resetTimer() { if(timerInt){ clearInterval(timerInt); timerInt=null; } timerRun=false; timerSec=0; updateTimerDisplay(); playClick(); showToast("🔄 تم التصفير"); }
+    
+    function updateClock() { let now=new Date(); document.getElementById("currentTime").innerHTML = `🏛️ بابل - ${new Intl.DateTimeFormat('ar-IQ', {weekday:'long', hour:'2-digit', minute:'2-digit', second:'2-digit', timeZone:'Asia/Baghdad'}).format(now)}`; }
+    setInterval(updateClock, 1000); updateClock();
+    
+    const TIPS = ["🚨 والدتك تدعو لك.. حقق الـ100!", "📰 والدك ينتظر فرحتك بالتفوق", "💪 أنت تستطيع أن تكون من الأوائل", "🎯 طريق المئة يبدأ بخطوة", "🌟 تعب أهلك ليس ثمناً", "📚 المراجعة اليومية تنقلك من الـ70 إلى الـ100"];
+    const QURAN = ["﴿ وَقُل رَّبِّ زِدْنِي عِلْمًا ﴾", "﴿ إِنَّ اللَّهَ مَعَ الصَّابِرِينَ ﴾", "﴿ إِنَّ الصَّلَاةَ كَانَتْ عَلَى الْمُؤْمِنِينَ كِتَابًا مَّوْقُوتًا ﴾"];
+    function loadMarquees() { let t=""; for(let i=0;i<2;i++) TIPS.forEach(tip=>t+=`🔴 • ${tip} • `); document.getElementById("tipsMarquee").innerHTML=t; let q=""; for(let i=0;i<2;i++) QURAN.forEach(v=>q+=`🕋 • ${v} • `); document.getElementById("quranMarquee").innerHTML=q; }
+    let tipIdx=0; setInterval(()=>{ tipIdx=(tipIdx+1)%TIPS.length; document.getElementById("miniTipText").innerHTML=TIPS[tipIdx]; },10000);
+    let ayahIdx=0; setInterval(()=>{ ayahIdx=(ayahIdx+1)%QURAN.length; document.getElementById("ayahContainer").innerHTML=`﴿ ${QURAN[ayahIdx]} ﴾`; },15000);
+    
+    const WEEK_DAYS = ["الأحد","الإثنين","الثلاثاء","الأربعاء","الخميس","الجمعة","السبت"];
+    let weeklyPlan = JSON.parse(localStorage.getItem("weeklyPlanMain")) || [["مراجعة الفيزياء","مراجعة الكيمياء","مراجعة الرياضيات","مراجعة العربية","مراجعة الأحياء","مراجعة الانكليزي","مراجعة الإسلامية"],["حل مسائل","حفظ قوانين","كتابة تجارب","اختبارات","ملخصات","مشاريع","تقييم"]];
+    function saveWeek() { localStorage.setItem("weeklyPlanMain", JSON.stringify(weeklyPlan)); }
+    function renderWeek() { let head = document.getElementById("weekDaysHeader"), body = document.getElementById("weekTasksBody"); if(!head || !body) return; head.innerHTML = `<td>${WEEK_DAYS.map(d=>`<th>${d}</th>`).join('')}<th style="width:40px;">حذف</th></tr>`; body.innerHTML = ""; for(let i=0; i<weeklyPlan.length; i++) { let tr = document.createElement("tr"); for(let j=0; j<7; j++) { let td = document.createElement("td"); td.className="editable-cell"; td.setAttribute("contenteditable","true"); td.setAttribute("data-r",i); td.setAttribute("data-c",j); td.innerText = weeklyPlan[i][j] || ""; td.onblur = function() { let r=parseInt(this.getAttribute("data-r")), c=parseInt(this.getAttribute("data-c")); weeklyPlan[r][c]=this.innerText; saveWeek(); }; tr.appendChild(td); } let delTd = document.createElement("td"); let delBtn = document.createElement("button"); delBtn.innerText="🗑️"; delBtn.style.background="#c62828"; delBtn.style.color="white"; delBtn.style.border="none"; delBtn.style.padding="2px 8px"; delBtn.style.borderRadius="30px"; delBtn.onclick = () => { weeklyPlan.splice(i,1); saveWeek(); renderWeek(); showToast("✅ تم حذف الصف"); }; delTd.appendChild(delBtn); tr.appendChild(delTd); body.appendChild(tr); } }
+    function addWeekRow() { weeklyPlan.push(["","","","","","",""]); saveWeek(); renderWeek(); showToast("➕ تم إضافة صف"); }
+    function exportWeek() { let a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([JSON.stringify(weeklyPlan)],{type:"application/json"})); a.download="خطتي.json"; a.click(); showToast("📥 تم التحميل"); }
+    function importWeek(file) { let r=new FileReader(); r.onload=e=>{ let data=JSON.parse(e.target.result); if(Array.isArray(data)&&data.length) { weeklyPlan=data; saveWeek(); renderWeek(); showToast("📤 استيراد ناجح"); } }; r.readAsText(file); }
+    function resetWeek() { weeklyPlan=[["مراجعة الفيزياء","مراجعة الكيمياء","مراجعة الرياضيات","مراجعة العربية","مراجعة الأحياء","مراجعة الانكليزي","مراجعة الإسلامية"],["حل مسائل","حفظ قوانين","كتابة تجارب","اختبارات","ملخصات","مشاريع","تقييم"]]; saveWeek(); renderWeek(); showToast("🔄 إعادة ضبط الجدول"); }
+    
+    let audioCtx = null;
+    function initAudio() { if(!audioCtx) try{ audioCtx=new (window.AudioContext||window.webkitAudioContext)(); } catch(e){} }
+    function playClick() { if(!audioCtx) initAudio(); if(audioCtx&&audioCtx.state==='suspended') audioCtx.resume(); if(!audioCtx) return; let o=audioCtx.createOscillator(), g=audioCtx.createGain(); o.connect(g); g.connect(audioCtx.destination); o.frequency.value=800; g.gain.value=0.05; g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime+0.1); o.start(); o.stop(audioCtx.currentTime+0.08); }
+    function playSuccess() { if(!audioCtx) initAudio(); if(audioCtx&&audioCtx.state==='suspended') audioCtx.resume(); if(!audioCtx) return; let now=audioCtx.currentTime; let o1=audioCtx.createOscillator(), g1=audioCtx.createGain(); o1.connect(g1); g1.connect(audioCtx.destination); o1.frequency.value=660; g1.gain.value=0.08; g1.gain.exponentialRampToValueAtTime(0.0001, now+0.2); o1.start(); o1.stop(now+0.18); let o2=audioCtx.createOscillator(), g2=audioCtx.createGain(); o2.connect(g2); g2.connect(audioCtx.destination); o2.frequency.value=880; g2.gain.value=0.08; g2.gain.exponentialRampToValueAtTime(0.0001, now+0.3); o2.start(now+0.12); o2.stop(now+0.3); }
+    function showToast(msg) { let d=document.createElement("div"); d.innerText=msg; d.style.position="fixed"; d.style.bottom="60px"; d.style.left="20px"; d.style.background="#1f5430"; d.style.color="white"; d.style.padding="6px 18px"; d.style.borderRadius="40px"; d.style.zIndex="9999"; document.body.appendChild(d); setTimeout(()=>d.remove(),1800); }
+    
+    function switchPage(pageId) { document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page')); document.getElementById(`${pageId}Page`).classList.add('active-page'); document.querySelectorAll('.menu-btn').forEach(btn => { if (btn.getAttribute('data-page') === pageId) btn.classList.add('active'); else btn.classList.remove('active'); }); if (pageId === 'main' && activeMaterial) renderCustomTable(activeMaterial.id, activeMaterial.name); if (pageId === 'prayer') updatePrayerTimes(); }
+    document.querySelectorAll('.menu-btn').forEach(btn => btn.addEventListener('click', () => switchPage(btn.getAttribute('data-page'))));
+    document.getElementById("testAlertBtn")?.addEventListener("click", () => { playPrayerAlert(); showToast("🔔 هذا صوت التنبيه التجريبي"); });
+    document.getElementById("timerStartBtn")?.addEventListener("click", startTimer);
+    document.getElementById("timerPauseBtn")?.addEventListener("click", pauseTimer);
+    document.getElementById("timerResetBtn")?.addEventListener("click", resetTimer);
+    document.getElementById("resetAchievementsAction")?.addEventListener("click", resetAchievements);
+    document.getElementById("resetEverythingAction")?.addEventListener("click", resetEverything);
+    document.getElementById("saveTargetsBtn")?.addEventListener("click", saveTargets);
+    document.getElementById("clearHistoryBtn")?.addEventListener("click", clearHistory);
+    document.getElementById("addRowWeeklyBtn")?.addEventListener("click", addWeekRow);
+    document.getElementById("exportWeeklyBtn")?.addEventListener("click", exportWeek);
+    document.getElementById("resetWeeklyBtn")?.addEventListener("click", resetWeek);
+    document.getElementById("importWeeklyBtn")?.addEventListener("click", () => document.getElementById("weeklyImportFile").click());
+    document.getElementById("weeklyImportFile")?.addEventListener("change", e => { if(e.target.files.length) importWeek(e.target.files[0]); e.target.value=""; });
+    document.body.addEventListener("click", () => { if(audioCtx && audioCtx.state === 'suspended') audioCtx.resume(); }, { once: true });
+    
+    renderTabs(); renderWeek(); loadMarquees(); loadAll(); showMaterial("physics", "الفيزياء"); initAudio(); updatePrayerTimes();
+</script>
+</body>
+</html>
