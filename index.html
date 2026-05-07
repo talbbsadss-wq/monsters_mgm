@@ -70,9 +70,7 @@
         .weekday-card.active { background: linear-gradient(135deg, #f3b33d, #ff9800); border-color: #fff; }
         .weekday-name { font-weight: bold; color: white; font-size: 0.85rem; }
         
-        /* الملاحظات */
-        .note-item { background: white; border-radius: 18px; margin-bottom: 8px; padding: 10px; border-right: 4px solid; cursor: pointer; transition: 0.1s; }
-        .note-item:active { transform: scale(0.98); }
+        .note-item { background: white; border-radius: 18px; margin-bottom: 8px; padding: 10px; border-right: 4px solid; cursor: pointer; }
         .note-item.islamic { border-right-color: #2e7d32; background: #e8f5e9; }
         .note-item.physics { border-right-color: #1565c0; background: #e3f2fd; }
         .note-item.math { border-right-color: #e65100; background: #fff3e0; }
@@ -98,20 +96,7 @@
         .all-note-date { font-size: 0.55rem; color: #7f6b3c; margin-top: 4px; text-align: left; }
         .notes-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px; }
         
-        /* زر إضافة الملاحظة */
-        .add-note-button {
-            background: #4caf50;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 30px;
-            font-size: 0.8rem;
-            margin-top: 10px;
-            cursor: pointer;
-            width: 100%;
-            font-weight: bold;
-            text-align: center;
-        }
+        .add-note-button { background: #4caf50; color: white; border: none; padding: 10px 15px; border-radius: 30px; font-size: 0.8rem; margin-top: 10px; cursor: pointer; width: 100%; font-weight: bold; text-align: center; }
         .add-note-button:active { transform: scale(0.97); }
         
         .prayer-row { display: flex; justify-content: space-between; align-items: center; background: white; padding: 8px 12px; margin: 6px 0; border-radius: 50px; }
@@ -191,7 +176,6 @@
         </div>
     </div>
 
-    <!-- الصفحة الرئيسية -->
     <div id="mainPage" class="page active-page">
         <div class="subjects-nav" id="tabsContainer"></div>
         <div class="subjects-grid" id="subjectsContainer"></div>
@@ -199,7 +183,6 @@
         <div id="notes-section-container" style="margin-top: 15px; border-top: 2px dashed #e0d0aa; padding-top: 12px;"></div>
     </div>
 
-    <!-- الجدول الأسبوعي -->
     <div id="weeklyPage" class="page">
         <h4>📅 خطتي الأسبوعية (اضغط على أي خلية لتعديل النص)</h4>
         <div style="overflow-x: auto;">
@@ -217,7 +200,6 @@
         </div>
     </div>
 
-    <!-- الجدول اليومي -->
     <div id="dailyPage" class="page">
         <h4>📅 اختر اليوم لعرض جدولك اليومي</h4>
         <div class="weekdays-container" id="weekdaysContainer"></div>
@@ -236,12 +218,11 @@
                 <table id="dailyTable" class="daily-table">
                     <thead id="dailyHeader"></thead>
                     <tbody id="dailyBody"></tbody>
-                </table>
+                <tr>
             </div>
         </div>
     </div>
 
-    <!-- صفحة الملاحظات -->
     <div id="notesListPage" class="page">
         <div class="notes-controls">
             <h4>📝 جميع ملاحظاتي</h4>
@@ -253,7 +234,6 @@
         <div id="allNotesList" class="all-notes-list"></div>
     </div>
 
-    <!-- الصلاة -->
     <div id="prayerPage" class="page">
         <div style="background: white; border-radius: 25px; padding: 15px;">
             <h3>🕌 أوقات الصلاة في بابل <span id="seasonBadge" style="background: #f3b33d; padding: 2px 10px; border-radius: 30px; font-size: 0.6rem;"></span></h3>
@@ -263,7 +243,6 @@
         <button id="resetPrayersBtn" style="background: #7f5539; color: white; width: 100%; margin-top: 10px; padding: 8px;">🔄 إعادة تعيين صلوات اليوم</button>
     </div>
 
-    <!-- الإنجازات -->
     <div id="historyPage" class="page">
         <div class="notes-controls">
             <h4>📜 سجل المواد المنجزة</h4>
@@ -276,7 +255,6 @@
         <button id="clearHistoryBtn" style="background: #7f5539; color: white; margin-top: 10px;">🗑️ مسح السجل</button>
     </div>
 
-    <!-- الإعدادات -->
     <div id="settingsPage" class="page">
         <div class="settings-group">
             <h4>🎯 تعديل الأهداف</h4>
@@ -402,7 +380,6 @@
     let audioCtx = null;
     let lastDate = new Date().toLocaleDateString('en-CA');
 
-    // ========================== دوال مساعدة ==========================
     function showToast(msg) {
         let d = document.createElement("div");
         d.innerText = msg;
@@ -481,24 +458,45 @@
         if (!appData.tasbeeh) appData.tasbeeh = [0, 0, 0, 0, 0];
     }
 
-    // ========================== تصفير منتصف الليل ==========================
+    // ========================== تصفير منتصف الليل - تم الإصلاح ==========================
     function checkMidnightReset() {
         const today = new Date().toLocaleDateString('en-CA');
         if (today !== lastDate) {
+            console.log("منتصف الليل: يتم التصفير...");
             lastDate = today;
-            subjects.forEach(s => { appData.completed[s.name] = false; });
+            
+            // تصفير المواد المكتملة (علامات الصح)
+            subjects.forEach(s => { 
+                appData.completed[s.name] = false; 
+            });
+            
+            // تصفير المهام اليومية
             appData.dailyCompleted = [];
+            
+            // تصفير الصلوات
             appData.prayerStatus = { fajr: false, dhuhr: false, asr: false, maghrib: false, isha: false };
+            
+            // ✅ لا يتم تصفير النقاط
+            // ✅ لا يتم تصفير الإنجازات الأسبوعية والشهرية
+            // ✅ لا يتم تصفير سجل الإنجازات
+            
             saveData();
+            
+            // تحديث واجهة المستخدم بالكامل
             updateUI();
+            
+            // إعادة عرض الجدول الحالي
+            showMaterialTable(currentSubject.id, currentSubject.name);
+            
             showToast("🕛 منتصف الليل: تم تصفير المواد والمهام اليومية والصلوات");
         }
         setTimeout(checkMidnightReset, 60000);
     }
 
-    // ========================== المواد والجداول ==========================
+    // ========================== عرض المواد والجداول ==========================
     function renderSubjectsCards() {
         const grid = document.getElementById("subjectsContainer");
+        if (!grid) return;
         grid.innerHTML = "";
         subjects.forEach(s => {
             const done = appData.completed[s.name];
@@ -534,6 +532,7 @@
 
     function renderTabs() {
         const tabs = document.getElementById("tabsContainer");
+        if (!tabs) return;
         tabs.innerHTML = "";
         subjects.forEach(s => {
             const btn = document.createElement("button");
@@ -544,9 +543,6 @@
         });
     }
 
-    // ======================================================
-    // ========== عرض الملاحظات مع زر الإضافة ==========
-    // ======================================================
     function renderSubjectNotes() {
         const container = document.getElementById("notes-section-container");
         if (!container) return;
@@ -573,7 +569,6 @@
             container.innerHTML = notesHtml;
         }
         
-        // ربط الزر بعد إنشائه
         const addBtn = document.getElementById("addNoteBtn");
         if (addBtn) {
             addBtn.onclick = function() {
@@ -698,7 +693,6 @@
         }
     }
 
-    // ربط أزرار المودالات
     document.getElementById("saveNoteBtn").onclick = () => {
         const title = document.getElementById("noteTitle").value;
         const content = document.getElementById("noteContent").value;
@@ -722,7 +716,7 @@
         for (let i = 0; i < appData.weekHeaders.length; i++) {
             headerHtml += `<th onclick="editWeekCol(${i})" style="cursor:pointer;">✏️ ${appData.weekHeaders[i]}</th>`;
         }
-        headerHtml += `<th style="width:60px;"></th><tr>`;
+        headerHtml += `<th style="width:60px;"></th></tr>`;
         thead.innerHTML = headerHtml;
         
         tbody.innerHTML = "";
@@ -747,7 +741,6 @@
             delBtn.style.border = "none";
             delBtn.style.padding = "4px 12px";
             delBtn.style.borderRadius = "30px";
-            delBtn.style.cursor = "pointer";
             delBtn.onclick = (function(rowIdx) {
                 return function() {
                     if (confirm("حذف هذا الصف؟")) {
@@ -1143,7 +1136,6 @@
         showToast(`⏰ تم ضبط المؤقت على ${minutes} دقيقة`);
     }
 
-    // ========================== عرض جدول المادة ==========================
     function showMaterialTable(id, name) {
         currentSubject = { id, name };
         const container = document.getElementById("tableContainer");
@@ -1174,7 +1166,7 @@
                     </div>`;
         container.innerHTML = html;
         attachTableEvents(id);
-        renderSubjectNotes(); // عرض الملاحظات
+        renderSubjectNotes();
         document.querySelectorAll(".tab-btn").forEach(btn => btn.classList.remove("active"));
         const activeTab = Array.from(document.querySelectorAll(".tab-btn")).find(btn => btn.innerText === name);
         if (activeTab) activeTab.classList.add("active");
