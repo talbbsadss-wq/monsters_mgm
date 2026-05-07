@@ -6,128 +6,140 @@
     <title>بابل - منصة الدراسة والتسبيح</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', 'Segoe UI', 'Tajawal', sans-serif; }
-        body { background: linear-gradient(145deg, #0d2818, #1a4a2a); min-height: 100vh; padding: 15px; }
+        body { background: linear-gradient(135deg, #0a2a1a, #143a24); min-height: 100vh; padding: 15px; }
         
-        .dashboard { max-width: 1300px; margin: 0 auto; background: #fef9ef; border-radius: 45px; overflow: hidden; }
-        .menu-bar { background: #1b4d2e; display: flex; flex-wrap: wrap; justify-content: center; gap: 5px; padding: 10px; }
-        .menu-btn { background: #2c6e3c; color: white; border: none; padding: 8px 18px; border-radius: 40px; font-size: 0.8rem; font-weight: bold; cursor: pointer; }
+        .dashboard { max-width: 1300px; margin: 0 auto; background: #fffaf2; border-radius: 48px; overflow: hidden; box-shadow: 0 20px 35px rgba(0,0,0,0.3); }
+        .menu-bar { background: #1b4d2e; display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; padding: 12px; border-bottom: 3px solid #f3b33d; }
+        .menu-btn { background: #2c6e3c; color: white; border: none; padding: 8px 20px; border-radius: 40px; font-size: 0.85rem; font-weight: bold; cursor: pointer; transition: 0.1s; }
         .menu-btn.active { background: #f3b33d; color: #1e3a1e; }
+        .menu-btn:active { transform: scale(0.95); }
         
-        .stats-header { background: #2c5530; padding: 8px 15px; display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; color: white; }
-        .stat-badge { background: rgba(0,0,0,0.4); padding: 4px 12px; border-radius: 40px; font-size: 0.75rem; }
+        .stats-header { background: #2c5530; padding: 10px 20px; display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; color: white; }
+        .stat-badge { background: rgba(0,0,0,0.4); padding: 5px 15px; border-radius: 40px; font-size: 0.8rem; font-weight: bold; }
         
-        .tasbeeh-container { background: #1e3a2a; padding: 8px; border-bottom: 2px solid #f3b33d; }
-        .tasbeeh-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
-        .tasbeeh-card { background: #2c5530; border-radius: 25px; padding: 5px 12px; display: flex; align-items: center; gap: 8px; }
-        .tasbeeh-name { font-weight: bold; color: #ffefcf; font-size: 0.75rem; }
-        .tasbeeh-count { background: black; padding: 2px 10px; border-radius: 30px; font-family: monospace; font-size: 1rem; font-weight: bold; color: #f3b33d; min-width: 55px; text-align: center; }
-        .tasbeeh-btn, .tasbeeh-reset { background: #f3b33d; border: none; padding: 2px 10px; border-radius: 30px; cursor: pointer; font-size: 0.7rem; }
+        .tasbeeh-container { background: #1e3a2a; padding: 10px; border-bottom: 2px solid #f3b33d; }
+        .tasbeeh-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+        .tasbeeh-card { background: #2c5530; border-radius: 30px; padding: 6px 15px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+        .tasbeeh-name { font-weight: bold; color: #ffefcf; font-size: 0.8rem; }
+        .tasbeeh-count { background: black; padding: 3px 12px; border-radius: 30px; font-family: monospace; font-size: 1.1rem; font-weight: bold; color: #f3b33d; min-width: 65px; text-align: center; }
+        .tasbeeh-btn, .tasbeeh-reset { background: #f3b33d; border: none; padding: 3px 12px; border-radius: 30px; cursor: pointer; font-size: 0.75rem; font-weight: bold; }
         .tasbeeh-reset { background: #7f5539; color: white; }
         
-        .tips-bar { background: #1e3a2a; padding: 5px; text-align: center; border-radius: 30px; margin: 5px; }
-        .tips-text { color: #ffeb3b; font-size: 0.75rem; font-weight: bold; }
+        .tips-bar { background: #1e3a2a; padding: 8px; text-align: center; border-radius: 40px; margin: 10px; }
+        .tips-text { color: #ffeb3b; font-size: 0.8rem; font-weight: bold; }
         
-        .main-header { background: #1b4d2e; padding: 8px; text-align: center; color: white; }
-        .main-header h1 { font-size: 1rem; }
-        .points-box { background: #f3b33d; color: #1e3a1e; padding: 2px 10px; border-radius: 40px; font-size: 0.75rem; }
+        .main-header { background: #1b4d2e; padding: 12px; text-align: center; color: white; }
+        .main-header h1 { font-size: 1.1rem; }
+        .points-box { background: #f3b33d; color: #1e3a1e; padding: 3px 12px; border-radius: 40px; font-size: 0.8rem; font-weight: bold; }
         
-        .timer-section { margin-top: 5px; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 5px; }
-        .timer-display { background: #000; padding: 4px 12px; border-radius: 40px; font-family: monospace; font-size: 1rem; font-weight: bold; }
-        .preset-btn { background: #f3b33d; padding: 3px 10px; font-size: 0.65rem; border-radius: 30px; cursor: pointer; border: none; }
+        .timer-section { margin-top: 8px; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px; }
+        .timer-display { background: #000; padding: 5px 15px; border-radius: 40px; font-family: monospace; font-size: 1.1rem; font-weight: bold; }
+        .preset-btn { background: #f3b33d; padding: 4px 12px; font-size: 0.7rem; border-radius: 30px; cursor: pointer; border: none; font-weight: bold; }
         
-        .page { display: none; padding: 10px; }
+        .page { display: none; padding: 15px; }
         .page.active-page { display: block; }
         
-        .subjects-nav { display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; margin-bottom: 10px; }
-        .tab-btn { background: #2c6e3c; color: white; padding: 4px 12px; border-radius: 40px; font-size: 0.7rem; cursor: pointer; }
+        .subjects-nav { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 15px; }
+        .tab-btn { background: #2c6e3c; color: white; padding: 6px 15px; border-radius: 40px; font-size: 0.75rem; font-weight: bold; cursor: pointer; transition: 0.1s; }
         .tab-btn.active { background: #f3b33d; color: #1e3a1e; }
         
-        .subjects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; margin-top: 10px; }
-        .subject-card { background: white; border-radius: 20px; padding: 10px; text-align: center; border: 1px solid #ffd966; cursor: pointer; }
+        .subjects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; margin-bottom: 15px; }
+        .subject-card { background: white; border-radius: 25px; padding: 12px; text-align: center; border: 1px solid #ffd966; cursor: pointer; transition: 0.05s; }
+        .subject-card:active { transform: scale(0.97); }
         .subject-card.completed { background: #c8e6c9; border: 2px solid #2e7d32; }
-        .subject-title { font-weight: bold; font-size: 0.9rem; }
-        .complete-action { background: #4caf50; color: white; padding: 3px; border-radius: 30px; font-size: 0.6rem; margin-top: 5px; width: 100%; border: none; cursor: pointer; }
+        .subject-title { font-weight: bold; font-size: 0.95rem; margin-bottom: 5px; }
+        .complete-action { background: #4caf50; color: white; padding: 4px; border-radius: 30px; font-size: 0.65rem; margin-top: 8px; width: 100%; border: none; cursor: pointer; }
         .complete-action.disabled { background: #2e7d32; opacity: 0.7; cursor: default; }
         
-        .custom-table-container { background: white; border-radius: 20px; padding: 10px; margin-top: 10px; overflow-x: auto; border: 1px solid #e0d0aa; }
-        .custom-table { width: 100%; border-collapse: collapse; }
-        .custom-table th, .custom-table td { border: 1px solid #cfb87c; padding: 8px; font-size: 0.75rem; text-align: center; }
-        .custom-table th { background: #e9dbba; cursor: pointer; }
+        .material-table-container { background: white; border-radius: 25px; padding: 15px; margin-top: 15px; overflow-x: auto; border: 1px solid #e0d0aa; }
+        .material-table { width: 100%; border-collapse: collapse; }
+        .material-table th, .material-table td { border: 1px solid #cfb87c; padding: 10px; font-size: 0.8rem; text-align: center; }
+        .material-table th { background: #e9dbba; cursor: pointer; }
         .editable-cell { background: #fff2da; cursor: text; }
         .editable-cell:focus { background: #ffe0a3; outline: 2px solid #f3b33d; }
-        .table-controls { display: flex; gap: 8px; justify-content: center; margin-top: 10px; flex-wrap: wrap; }
+        .table-buttons { display: flex; gap: 10px; justify-content: center; margin-top: 12px; flex-wrap: wrap; }
         
-        .week-table { width: 100%; border-collapse: collapse; background: white; border-radius: 15px; overflow: hidden; }
-        .week-table th, .week-table td { border: 1px solid #c0a86a; padding: 10px; font-size: 0.8rem; text-align: center; background: #fffef5; }
+        /* الجدول الأسبوعي - مُصلح */
+        .week-table { width: 100%; border-collapse: collapse; background: white; border-radius: 20px; overflow: hidden; }
+        .week-table th, .week-table td { border: 1px solid #c0a86a; padding: 12px; font-size: 0.8rem; text-align: center; background: #fffef5; }
         .week-table th { background: #e9dbba; font-weight: bold; cursor: pointer; }
         
-        .daily-table { width: 100%; border-collapse: collapse; background: white; border-radius: 15px; overflow: hidden; }
+        .daily-table { width: 100%; border-collapse: collapse; background: white; border-radius: 20px; overflow: hidden; }
         .daily-table th, .daily-table td { border: 1px solid #c0a86a; padding: 10px; font-size: 0.8rem; text-align: center; background: #fffef5; }
         .daily-table th { background: #e9dbba; font-weight: bold; cursor: pointer; }
         
-        .weekdays-container { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; margin: 15px 0; }
-        .weekday-card { background: linear-gradient(135deg, #2c5530, #1e3a2a); border-radius: 20px; padding: 12px 5px; text-align: center; cursor: pointer; border: 2px solid #f3b33d; }
-        .weekday-card.active { background: linear-gradient(135deg, #f3b33d, #ff9800); border-color: #fff; }
+        .weekdays-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 12px; margin-bottom: 20px; }
+        .weekday-box { background: linear-gradient(135deg, #2c5530, #1e3a2a); border-radius: 25px; padding: 15px 5px; text-align: center; cursor: pointer; border: 2px solid #f3b33d; transition: 0.1s; }
+        .weekday-box:active { transform: scale(0.96); }
+        .weekday-box.active { background: linear-gradient(135deg, #f3b33d, #ff9800); border-color: #fff; }
         .weekday-name { font-weight: bold; color: white; font-size: 0.85rem; }
         
-        .note-item { background: white; border-radius: 18px; margin-bottom: 8px; padding: 10px; border-right: 4px solid; cursor: pointer; }
-        .note-item.islamic { border-right-color: #2e7d32; background: #e8f5e9; }
-        .note-item.physics { border-right-color: #1565c0; background: #e3f2fd; }
-        .note-item.math { border-right-color: #e65100; background: #fff3e0; }
-        .note-item.chemistry { border-right-color: #6a1b9a; background: #f3e5f5; }
-        .note-item.biology { border-right-color: #00897b; background: #e0f2f1; }
-        .note-item.arabic { border-right-color: #c62828; background: #ffebee; }
-        .note-item.english { border-right-color: #4527a0; background: #ede7f6; }
-        .note-title { font-weight: bold; font-size: 0.8rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .note-date { font-size: 0.55rem; color: #7f6b3c; margin-top: 4px; text-align: left; direction: ltr; }
-        .note-content-preview { font-size: 0.65rem; color: #5a4a2a; margin-top: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        /* الملاحظات */
+        .notes-wrapper { margin-top: 20px; border-top: 2px dashed #e0d0aa; padding-top: 15px; }
+        .notes-title { color: #2a5c3e; font-size: 0.9rem; margin-bottom: 10px; font-weight: bold; }
+        .note-box { background: white; border-radius: 20px; margin-bottom: 10px; padding: 12px; border-right: 5px solid; cursor: pointer; transition: 0.1s; }
+        .note-box:active { transform: scale(0.98); }
+        .note-box.islamic { border-right-color: #2e7d32; background: #e8f5e9; }
+        .note-box.physics { border-right-color: #1565c0; background: #e3f2fd; }
+        .note-box.math { border-right-color: #e65100; background: #fff3e0; }
+        .note-box.chemistry { border-right-color: #6a1b9a; background: #f3e5f5; }
+        .note-box.biology { border-right-color: #00897b; background: #e0f2f1; }
+        .note-box.arabic { border-right-color: #c62828; background: #ffebee; }
+        .note-box.english { border-right-color: #4527a0; background: #ede7f6; }
+        .note-title { font-weight: bold; font-size: 0.85rem; }
+        .note-date { font-size: 0.6rem; color: #7f6b3c; margin-top: 5px; text-align: left; }
+        .note-preview { font-size: 0.7rem; color: #5a4a2a; margin-top: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .add-note-button { background: #4caf50; color: white; border: none; padding: 8px 15px; border-radius: 30px; font-size: 0.75rem; margin-top: 10px; cursor: pointer; width: 100%; font-weight: bold; }
         
-        .all-notes-list { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
-        .all-note-item { background: white; border-radius: 18px; padding: 10px; border-right: 4px solid; cursor: pointer; }
-        .all-note-item.islamic { border-right-color: #2e7d32; background: #e8f5e9; }
-        .all-note-item.physics { border-right-color: #1565c0; background: #e3f2fd; }
-        .all-note-item.math { border-right-color: #e65100; background: #fff3e0; }
-        .all-note-item.chemistry { border-right-color: #6a1b9a; background: #f3e5f5; }
-        .all-note-item.biology { border-right-color: #00897b; background: #e0f2f1; }
-        .all-note-item.arabic { border-right-color: #c62828; background: #ffebee; }
-        .all-note-item.english { border-right-color: #4527a0; background: #ede7f6; }
-        .all-note-title { font-weight: bold; font-size: 0.8rem; }
-        .all-note-content { font-size: 0.65rem; color: #5a4a2a; margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .all-note-date { font-size: 0.55rem; color: #7f6b3c; margin-top: 4px; text-align: left; }
-        .notes-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px; }
+        .all-notes-list { display: flex; flex-direction: column; gap: 10px; }
+        .all-note-card { background: white; border-radius: 20px; padding: 12px; border-right: 5px solid; cursor: pointer; }
+        .all-note-card.islamic { border-right-color: #2e7d32; background: #e8f5e9; }
+        .all-note-card.physics { border-right-color: #1565c0; background: #e3f2fd; }
+        .all-note-card.math { border-right-color: #e65100; background: #fff3e0; }
+        .all-note-card.chemistry { border-right-color: #6a1b9a; background: #f3e5f5; }
+        .all-note-card.biology { border-right-color: #00897b; background: #e0f2f1; }
+        .all-note-card.arabic { border-right-color: #c62828; background: #ffebee; }
+        .all-note-card.english { border-right-color: #4527a0; background: #ede7f6; }
+        .all-note-title { font-weight: bold; font-size: 0.85rem; }
+        .all-note-content { font-size: 0.7rem; color: #5a4a2a; margin-top: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .all-note-date { font-size: 0.6rem; color: #7f6b3c; margin-top: 5px; text-align: left; }
+        .notes-control-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px; }
         
-        .add-note-button { background: #4caf50; color: white; border: none; padding: 10px 15px; border-radius: 30px; font-size: 0.8rem; margin-top: 10px; cursor: pointer; width: 100%; font-weight: bold; text-align: center; }
-        .add-note-button:active { transform: scale(0.97); }
-        
-        .prayer-row { display: flex; justify-content: space-between; align-items: center; background: white; padding: 8px 12px; margin: 6px 0; border-radius: 50px; }
-        .prayer-check { width: 28px; height: 28px; border-radius: 50%; border: 2px solid #4caf50; display: flex; align-items: center; justify-content: center; cursor: pointer; background: white; }
+        .prayer-row { display: flex; justify-content: space-between; align-items: center; background: white; padding: 10px 15px; margin: 8px 0; border-radius: 50px; }
+        .prayer-check { width: 32px; height: 32px; border-radius: 50%; border: 2px solid #4caf50; display: flex; align-items: center; justify-content: center; cursor: pointer; background: white; font-weight: bold; }
         .prayer-check.completed { background: #4caf50; color: white; }
         
-        .history-list { max-height: 400px; overflow-y: auto; }
-        .history-item { background: white; border-radius: 15px; padding: 8px; margin-bottom: 8px; border-right: 4px solid #4caf50; }
+        .history-list { max-height: 450px; overflow-y: auto; }
+        .history-item { background: white; border-radius: 18px; padding: 10px; margin-bottom: 10px; border-right: 4px solid #4caf50; }
         
-        .settings-group { background: white; border-radius: 20px; padding: 12px; margin-bottom: 10px; }
-        .settings-group input { width: 100%; padding: 6px; border-radius: 30px; border: 1px solid #cfb87c; margin: 5px 0; }
+        .settings-group { background: white; border-radius: 25px; padding: 15px; margin-bottom: 15px; }
+        .settings-group label { font-weight: bold; display: block; margin-top: 8px; }
+        .settings-group input { width: 100%; padding: 8px; border-radius: 30px; border: 1px solid #cfb87c; margin-top: 5px; }
         
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); z-index: 20001; align-items: center; justify-content: center; }
-        .modal-content { background: #fffaf2; border-radius: 40px; width: 90%; max-width: 400px; overflow: hidden; border: 2px solid #f3b33d; }
-        .modal-header { padding: 15px; background: #f3b33d; color: #1e3a1e; font-weight: bold; text-align: center; font-size: 1.1rem; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 20000; align-items: center; justify-content: center; }
+        .modal-content { background: #fffaf2; border-radius: 45px; width: 90%; max-width: 420px; overflow: hidden; border: 2px solid #f3b33d; }
+        .modal-header { padding: 18px; background: #f3b33d; color: #1e3a1e; font-weight: bold; text-align: center; font-size: 1.2rem; }
         .modal-body { padding: 20px; }
-        .modal-body input, .modal-body textarea { width: 100%; padding: 10px; margin: 8px 0; border-radius: 30px; border: 1px solid #cfb87c; font-size: 0.9rem; }
-        .modal-body textarea { border-radius: 20px; resize: vertical; }
-        .modal-footer { display: flex; gap: 10px; padding: 15px; background: #f5f0e0; }
-        .modal-footer button { flex: 1; padding: 8px; border-radius: 40px; font-weight: bold; cursor: pointer; border: none; }
+        .modal-body input, .modal-body textarea { width: 100%; padding: 12px; margin: 10px 0; border-radius: 35px; border: 1px solid #cfb87c; font-size: 0.9rem; }
+        .modal-body textarea { border-radius: 25px; resize: vertical; }
+        .modal-footer { display: flex; gap: 12px; padding: 18px; background: #f5f0e0; }
+        .modal-footer button { flex: 1; padding: 10px; border-radius: 40px; font-weight: bold; cursor: pointer; border: none; }
         
-        button { background: #f3b33d; border: none; padding: 4px 10px; border-radius: 40px; cursor: pointer; }
-        .footer-credit { text-align: center; padding: 8px; font-size: 0.6rem; color: #7f6b3c; border-top: 1px solid #e0d0aa; margin-top: 10px; }
+        .btn-primary { background: #4caf50; color: white; }
+        .btn-secondary { background: #7f5539; color: white; }
+        .btn-warning { background: #ff9800; color: #1e3a1e; }
+        .btn-danger { background: #c62828; color: white; }
         
-        @media (max-width: 700px) { .weekdays-container { grid-template-columns: repeat(4, 1fr); } }
-        @media (max-width: 500px) { .weekdays-container { grid-template-columns: repeat(2, 1fr); } }
+        button { background: #f3b33d; border: none; padding: 5px 12px; border-radius: 40px; cursor: pointer; font-weight: bold; }
+        .footer-credit { text-align: center; padding: 10px; font-size: 0.7rem; color: #7f6b3c; border-top: 1px solid #e0d0aa; margin-top: 15px; }
+        
+        @media (max-width: 700px) { .weekdays-grid { grid-template-columns: repeat(4, 1fr); } }
+        @media (max-width: 500px) { .weekdays-grid { grid-template-columns: repeat(2, 1fr); } }
     </style>
 </head>
 <body>
 
-<div id="mainApp" class="dashboard">
+<div class="dashboard">
     <div class="menu-bar">
         <button class="menu-btn active" data-page="main">🏠 الرئيسية</button>
         <button class="menu-btn" data-page="weekly">📅 الأسبوعي</button>
@@ -179,10 +191,11 @@
     <div id="mainPage" class="page active-page">
         <div class="subjects-nav" id="tabsContainer"></div>
         <div class="subjects-grid" id="subjectsContainer"></div>
-        <div id="tableContainer" class="custom-table-container"></div>
-        <div id="notes-section-container" style="margin-top: 15px; border-top: 2px dashed #e0d0aa; padding-top: 12px;"></div>
+        <div id="materialTableContainer" class="material-table-container"></div>
+        <div id="notesWrapper" class="notes-wrapper"></div>
     </div>
 
+    <!-- الجدول الأسبوعي - مُصلح -->
     <div id="weeklyPage" class="page">
         <h4>📅 خطتي الأسبوعية (اضغط على أي خلية لتعديل النص)</h4>
         <div style="overflow-x: auto;">
@@ -191,68 +204,68 @@
                 <tbody id="weeklyBody"></tbody>
             </table>
         </div>
-        <div class="table-controls">
-            <button id="addWeekRow" style="background:#4caf50; color:white;">➕ إضافة صف</button>
-            <button id="addWeekCol" style="background:#2196f3; color:white;">➕ إضافة عمود</button>
-            <button id="deleteWeekLastRow" style="background:#ff9800; color:white;">🗑️ حذف آخر صف</button>
-            <button id="deleteWeekLastCol" style="background:#c62828; color:white;">🗑️ حذف آخر عمود</button>
-            <button id="resetWeek" style="background:#7f5539; color:white;">🔄 إعادة ضبط</button>
+        <div class="table-buttons">
+            <button id="addWeekRow" class="btn-primary">➕ إضافة صف</button>
+            <button id="addWeekCol" class="btn-primary">➕ إضافة عمود</button>
+            <button id="deleteWeekLastRow" class="btn-warning">🗑️ حذف آخر صف</button>
+            <button id="deleteWeekLastCol" class="btn-danger">🗑️ حذف آخر عمود</button>
+            <button id="resetWeek" class="btn-secondary">🔄 إعادة ضبط</button>
         </div>
     </div>
 
     <div id="dailyPage" class="page">
         <h4>📅 اختر اليوم لعرض جدولك اليومي</h4>
-        <div class="weekdays-container" id="weekdaysContainer"></div>
+        <div class="weekdays-grid" id="weekdaysContainer"></div>
         <div id="dailyScheduleContainer" style="display: none;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 10px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
                 <h3 id="dailyTitle" style="color: #2a5c3e;">جدول اليوم</h3>
-                <div class="table-controls">
-                    <button id="addDailyRow" style="background:#4caf50; color:white;">➕ إضافة صف</button>
-                    <button id="addDailyCol" style="background:#2196f3; color:white;">➕ إضافة عمود</button>
-                    <button id="deleteDailyLastRow" style="background:#ff9800; color:white;">🗑️ حذف آخر صف</button>
-                    <button id="deleteDailyLastCol" style="background:#c62828; color:white;">🗑️ حذف آخر عمود</button>
-                    <button id="resetDaily" style="background:#7f5539; color:white;">🔄 إعادة ضبط</button>
+                <div class="table-buttons">
+                    <button id="addDailyRow" class="btn-primary">➕ إضافة صف</button>
+                    <button id="addDailyCol" class="btn-primary">➕ إضافة عمود</button>
+                    <button id="deleteDailyLastRow" class="btn-warning">🗑️ حذف آخر صف</button>
+                    <button id="deleteDailyLastCol" class="btn-danger">🗑️ حذف آخر عمود</button>
+                    <button id="resetDaily" class="btn-secondary">🔄 إعادة ضبط</button>
                 </div>
             </div>
             <div style="overflow-x: auto;">
                 <table id="dailyTable" class="daily-table">
                     <thead id="dailyHeader"></thead>
                     <tbody id="dailyBody"></tbody>
-                <tr>
+                </table>
             </div>
         </div>
     </div>
 
     <div id="notesListPage" class="page">
-        <div class="notes-controls">
+        <div class="notes-control-bar">
             <h4>📝 جميع ملاحظاتي</h4>
             <div style="display: flex; gap: 8px;">
-                <button id="sortNotesNewest" style="background:#2196f3; color:white; padding:3px 12px; border-radius:30px;">🔄 الأحدث أولاً</button>
-                <button id="sortNotesOldest" style="background:#2196f3; color:white; padding:3px 12px; border-radius:30px;">🔄 الأقدم أولاً</button>
+                <button id="sortNotesNewest" class="btn-primary">🔄 الأحدث أولاً</button>
+                <button id="sortNotesOldest" class="btn-primary">🔄 الأقدم أولاً</button>
             </div>
         </div>
         <div id="allNotesList" class="all-notes-list"></div>
     </div>
 
     <div id="prayerPage" class="page">
-        <div style="background: white; border-radius: 25px; padding: 15px;">
-            <h3>🕌 أوقات الصلاة في بابل <span id="seasonBadge" style="background: #f3b33d; padding: 2px 10px; border-radius: 30px; font-size: 0.6rem;"></span></h3>
+        <div style="background: white; border-radius: 30px; padding: 20px;">
+            <h3>🕌 أوقات الصلاة في بابل <span id="seasonBadge" style="background: #f3b33d; padding: 4px 12px; border-radius: 30px; font-size: 0.7rem;"></span></h3>
             <div id="prayersList"></div>
-            <div id="nextAdhanAlert" style="background: #f3b33d; padding: 8px; border-radius: 30px; margin-top: 12px; text-align: center; font-size: 0.75rem;"></div>
+            <div id="nextAdhanAlert" style="background: #f3b33d; padding: 10px; border-radius: 35px; margin-top: 15px; text-align: center; font-size: 0.8rem;"></div>
         </div>
-        <button id="resetPrayersBtn" style="background: #7f5539; color: white; width: 100%; margin-top: 10px; padding: 8px;">🔄 إعادة تعيين صلوات اليوم</button>
+        <button id="resetPrayersBtn" class="btn-secondary" style="width: 100%; margin-top: 12px; padding: 10px;">🔄 إعادة تعيين صلوات اليوم</button>
     </div>
 
     <div id="historyPage" class="page">
-        <div class="notes-controls">
+        <div class="notes-control-bar">
             <h4>📜 سجل المواد المنجزة</h4>
             <div style="display: flex; gap: 8px;">
-                <button id="sortHistoryNewest" style="background:#2196f3; color:white; padding:3px 12px; border-radius:30px;">🔄 الأحدث أولاً</button>
-                <button id="sortHistoryOldest" style="background:#2196f3; color:white; padding:3px 12px; border-radius:30px;">🔄 الأقدم أولاً</button>
+                <button id="sortHistoryNewest" class="btn-primary">🔄 الأحدث أولاً</button>
+                <button id="sortHistoryOldest" class="btn-primary">🔄 الأقدم أولاً</button>
             </div>
         </div>
         <div id="historyList" class="history-list"></div>
-        <button id="clearHistoryBtn" style="background: #7f5539; color: white; margin-top: 10px;">🗑️ مسح السجل</button>
+        <button id="clearHistoryBtn" class="btn-secondary" style="margin-top: 12px; width: 100%; padding: 10px;">🗑️ مسح السجل</button>
     </div>
 
     <div id="settingsPage" class="page">
@@ -264,20 +277,20 @@
             <input type="number" id="weeklyInput" min="1" max="50">
             <label>الهدف الشهري:</label>
             <input type="number" id="monthlyInput" min="1" max="200">
-            <button id="saveTargets" style="background: #4caf50; color: white;">💾 حفظ</button>
+            <button id="saveTargets" class="btn-primary" style="margin-top: 12px;">💾 حفظ</button>
         </div>
         <div class="settings-group">
             <h4>🔄 إعادة ضبط</h4>
-            <button id="resetAchievements" style="background: #ff9800;">🔄 إعادة ضبط المواد المكتملة والنقاط</button>
-            <button id="resetAll" style="background: #b3432c; color: white; margin-top: 10px;">🗑️ إعادة تعيين الكل (كل شيء)</button>
+            <button id="resetAchievements" class="btn-warning" style="width: 100%;">🔄 إعادة ضبط المواد المكتملة والنقاط</button>
+            <button id="resetAll" class="btn-danger" style="width: 100%; margin-top: 10px;">🗑️ إعادة تعيين الكل (كل شيء)</button>
         </div>
         <div class="settings-group">
             <h4>🎵 الإعدادات</h4>
             <label>🔔 تنبيه المؤقت:</label>
-            <select id="timerSoundEnable"><option value="yes">نعم</option><option value="no">لا</option></select>
+            <select id="timerSoundEnable" class="btn-secondary"><option value="yes">نعم</option><option value="no">لا</option></select>
             <label>📢 أذان الصلاة:</label>
-            <select id="adhanEnable"><option value="yes">نعم</option><option value="no">لا</option></select>
-            <button id="saveSettingsBtn" style="background: #4caf50; color: white;">💾 حفظ</button>
+            <select id="adhanEnable" class="btn-secondary"><option value="yes">نعم</option><option value="no">لا</option></select>
+            <button id="saveSettingsBtn" class="btn-primary" style="margin-top: 12px;">💾 حفظ</button>
         </div>
     </div>
 
@@ -287,7 +300,7 @@
     <div class="footer-credit">BY MONSTERS_MGM © 2026</div>
 </div>
 
-<!-- مودال إضافة ملاحظة -->
+<!-- مودالات -->
 <div id="noteModal" class="modal">
     <div class="modal-content">
         <div class="modal-header">➕ إضافة ملاحظة جديدة</div>
@@ -296,30 +309,28 @@
             <textarea id="noteContent" rows="4" placeholder="محتوى الملاحظة..."></textarea>
         </div>
         <div class="modal-footer">
-            <button id="saveNoteBtn" style="background: #4caf50; color: white;">💾 حفظ</button>
-            <button id="closeNoteModalBtn" style="background: #7f5539; color: white;">إلغاء</button>
+            <button id="saveNoteBtn" class="btn-primary">💾 حفظ</button>
+            <button id="closeNoteModalBtn" class="btn-secondary">إلغاء</button>
         </div>
     </div>
 </div>
 
-<!-- مودال عرض الملاحظة -->
 <div id="viewNoteModal" class="modal">
     <div class="modal-content">
         <div class="modal-header">📝 تفاصيل الملاحظة</div>
         <div class="modal-body">
-            <h4 id="viewNoteTitle" style="font-weight: bold; margin-bottom: 10px;"></h4>
-            <p id="viewNoteContent" style="margin: 10px 0; line-height: 1.5;"></p>
+            <h4 id="viewNoteTitle" style="font-weight: bold; margin-bottom: 12px;"></h4>
+            <p id="viewNoteContent" style="margin: 12px 0; line-height: 1.6;"></p>
             <p id="viewNoteTime" style="font-size: 0.7rem; color: #7f6b3c;"></p>
         </div>
         <div class="modal-footer">
-            <button id="editNoteBtn" style="background: #2196f3; color: white;">✏️ تعديل</button>
-            <button id="deleteNoteBtn" style="background: #c62828; color: white;">🗑️ حذف</button>
-            <button id="closeViewModalBtn" style="background: #7f5539; color: white;">إغلاق</button>
+            <button id="editNoteBtn" class="btn-primary">✏️ تعديل</button>
+            <button id="deleteNoteBtn" class="btn-danger">🗑️ حذف</button>
+            <button id="closeViewModalBtn" class="btn-secondary">إغلاق</button>
         </div>
     </div>
 </div>
 
-<!-- مودال تعديل العمود -->
 <div id="editColumnModal" class="modal">
     <div class="modal-content">
         <div class="modal-header">✏️ تعديل اسم العمود</div>
@@ -327,8 +338,21 @@
             <input type="text" id="newColumnName" placeholder="الاسم الجديد للعمود">
         </div>
         <div class="modal-footer">
-            <button id="saveColumnBtn" style="background: #4caf50; color: white;">💾 حفظ</button>
-            <button id="closeColumnModalBtn" style="background: #7f5539; color: white;">إلغاء</button>
+            <button id="saveColumnBtn" class="btn-primary">💾 حفظ</button>
+            <button id="closeColumnModalBtn" class="btn-secondary">إلغاء</button>
+        </div>
+    </div>
+</div>
+
+<div id="confirmModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">⚠️ تأكيد</div>
+        <div class="modal-body">
+            <p id="confirmMessage" style="text-align: center; font-size: 1rem;"></p>
+        </div>
+        <div class="modal-footer">
+            <button id="confirmYesBtn" class="btn-danger">نعم</button>
+            <button id="confirmNoBtn" class="btn-secondary">إلغاء</button>
         </div>
     </div>
 </div>
@@ -380,20 +404,34 @@
     let audioCtx = null;
     let lastDate = new Date().toLocaleDateString('en-CA');
 
+    let pendingConfirmCallback = null;
+
     function showToast(msg) {
         let d = document.createElement("div");
         d.innerText = msg;
         d.style.position = "fixed";
-        d.style.bottom = "70px";
+        d.style.bottom = "80px";
         d.style.left = "20px";
         d.style.background = "#1f5430";
         d.style.color = "white";
-        d.style.padding = "6px 18px";
-        d.style.borderRadius = "40px";
+        d.style.padding = "8px 20px";
+        d.style.borderRadius = "45px";
         d.style.zIndex = "10001";
         d.style.fontWeight = "bold";
+        d.style.boxShadow = "0 3px 10px rgba(0,0,0,0.3)";
         document.body.appendChild(d);
         setTimeout(() => d.remove(), 2000);
+    }
+
+    function showConfirm(message, callback) {
+        pendingConfirmCallback = callback;
+        document.getElementById("confirmMessage").innerText = message;
+        document.getElementById("confirmModal").style.display = "flex";
+    }
+
+    function hideConfirm() {
+        document.getElementById("confirmModal").style.display = "none";
+        pendingConfirmCallback = null;
     }
 
     function initAudio() {
@@ -407,12 +445,12 @@
         let now = audioCtx.currentTime;
         let o1 = audioCtx.createOscillator(), g1 = audioCtx.createGain();
         o1.connect(g1); g1.connect(audioCtx.destination);
-        o1.frequency.value = 660; g1.gain.value = 0.08;
+        o1.frequency.value = 660; g1.gain.value = 0.1;
         g1.gain.exponentialRampToValueAtTime(0.0001, now + 0.2);
         o1.start(); o1.stop(now + 0.18);
         let o2 = audioCtx.createOscillator(), g2 = audioCtx.createGain();
         o2.connect(g2); g2.connect(audioCtx.destination);
-        o2.frequency.value = 880; g2.gain.value = 0.08;
+        o2.frequency.value = 880; g2.gain.value = 0.1;
         g2.gain.exponentialRampToValueAtTime(0.0001, now + 0.3);
         o2.start(now + 0.12); o2.stop(now + 0.3);
     }
@@ -458,14 +496,13 @@
         if (!appData.tasbeeh) appData.tasbeeh = [0, 0, 0, 0, 0];
     }
 
-    // ========================== تصفير منتصف الليل - تم الإصلاح ==========================
+    // ========================== تصفير منتصف الليل (المشكلة الأساسية) ==========================
     function checkMidnightReset() {
         const today = new Date().toLocaleDateString('en-CA');
         if (today !== lastDate) {
-            console.log("منتصف الليل: يتم التصفير...");
             lastDate = today;
             
-            // تصفير المواد المكتملة (علامات الصح)
+            // ✅ تصفير المواد المكتملة فقط - هذا هو المطلوب
             subjects.forEach(s => { 
                 appData.completed[s.name] = false; 
             });
@@ -476,24 +513,18 @@
             // تصفير الصلوات
             appData.prayerStatus = { fajr: false, dhuhr: false, asr: false, maghrib: false, isha: false };
             
-            // ✅ لا يتم تصفير النقاط
-            // ✅ لا يتم تصفير الإنجازات الأسبوعية والشهرية
-            // ✅ لا يتم تصفير سجل الإنجازات
+            // ✅ الحفاظ على النقاط وسجل الإنجازات والأهداف الأسبوعية والشهرية
+            // لا يتم تصفيرها
             
             saveData();
-            
-            // تحديث واجهة المستخدم بالكامل
             updateUI();
-            
-            // إعادة عرض الجدول الحالي
             showMaterialTable(currentSubject.id, currentSubject.name);
-            
             showToast("🕛 منتصف الليل: تم تصفير المواد والمهام اليومية والصلوات");
         }
         setTimeout(checkMidnightReset, 60000);
     }
 
-    // ========================== عرض المواد والجداول ==========================
+    // ========================== المواد والجداول ==========================
     function renderSubjectsCards() {
         const grid = document.getElementById("subjectsContainer");
         if (!grid) return;
@@ -504,7 +535,7 @@
             card.className = `subject-card ${done ? 'completed' : ''}`;
             card.innerHTML = `
                 <div class="subject-title">${s.name}</div>
-                <div>${done ? '✅' : '📖'}</div>
+                <div style="font-size: 1.2rem;">${done ? '✅' : '📖'}</div>
                 <button class="complete-action ${done ? 'disabled' : ''}">${done ? 'تم ✓' : '✔️ إكمال'}</button>
             `;
             card.onclick = (e) => { if (e.target.tagName !== 'BUTTON') showMaterialTable(s.id, s.name); };
@@ -543,37 +574,40 @@
         });
     }
 
-    function renderSubjectNotes() {
-        const container = document.getElementById("notes-section-container");
-        if (!container) return;
+    function getNoteClass(subjectId) {
+        const s = subjects.find(s => s.id === subjectId);
+        return s ? s.class : "islamic";
+    }
+
+    function renderNotesForSubject() {
+        const wrapper = document.getElementById("notesWrapper");
+        if (!wrapper) return;
         
         const subjectNotes = appData.notes.filter(n => n.subjectId === currentSubject.id);
         
         if (subjectNotes.length === 0) {
-            container.innerHTML = `
+            wrapper.innerHTML = `
                 <div class="notes-title">📝 ملاحظات هذه المادة</div>
-                <div style="text-align:center; padding:15px; color:#7f6b3c;">لا توجد ملاحظات</div>
+                <div style="text-align: center; padding: 20px; color: #7f6b3c;">لا توجد ملاحظات</div>
                 <button id="addNoteBtn" class="add-note-button">➕ إضافة ملاحظة لهذه المادة</button>
             `;
         } else {
             const sorted = [...subjectNotes].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
             let notesHtml = `<div class="notes-title">📝 ملاحظات هذه المادة</div>`;
             notesHtml += sorted.map(note => `
-                <div class="note-item ${getNoteClass(note.subjectId)}" onclick="openViewNoteModal('${note.id}')">
+                <div class="note-box ${getNoteClass(note.subjectId)}" onclick="openViewNoteModal('${note.id}')">
                     <div class="note-title">📌 ${escapeHtml(note.title)}</div>
-                    <div class="note-content-preview">${escapeHtml(note.content.substring(0, 60))}${note.content.length > 60 ? '...' : ''}</div>
+                    <div class="note-preview">${escapeHtml(note.content.substring(0, 60))}${note.content.length > 60 ? '...' : ''}</div>
                     <div class="note-date">📅 ${new Date(note.timestamp).toLocaleString('ar-IQ')}</div>
                 </div>
             `).join('');
             notesHtml += `<button id="addNoteBtn" class="add-note-button">➕ إضافة ملاحظة لهذه المادة</button>`;
-            container.innerHTML = notesHtml;
+            wrapper.innerHTML = notesHtml;
         }
         
         const addBtn = document.getElementById("addNoteBtn");
         if (addBtn) {
-            addBtn.onclick = function() {
-                openAddNoteModal();
-            };
+            addBtn.onclick = () => openAddNoteModal();
         }
     }
 
@@ -587,27 +621,22 @@
             sorted.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
         }
         if (sorted.length === 0) {
-            container.innerHTML = '<div style="text-align:center; padding:20px; color:#7f6b3c;">📝 لا توجد ملاحظات بعد</div>';
+            container.innerHTML = '<div style="text-align: center; padding: 30px; color: #7f6b3c;">📝 لا توجد ملاحظات بعد</div>';
             return;
         }
         container.innerHTML = sorted.map(note => `
-            <div class="all-note-item ${getNoteClass(note.subjectId)}" onclick="openViewNoteModal('${note.id}')">
+            <div class="all-note-card ${getNoteClass(note.subjectId)}" onclick="openViewNoteModal('${note.id}')">
                 <div class="all-note-title">📌 ${escapeHtml(note.title)}</div>
                 <div class="all-note-content">${escapeHtml(note.content.substring(0, 80))}${note.content.length > 80 ? '...' : ''}</div>
                 <div class="all-note-date">📅 ${new Date(note.timestamp).toLocaleString('ar-IQ')}</div>
-                <div style="font-size:0.6rem; color:#2c6e3c; margin-top:4px;">📘 ${note.subjectName}</div>
+                <div style="font-size: 0.65rem; color: #2c6e3c; margin-top: 5px;">📘 ${note.subjectName}</div>
             </div>
         `).join('');
     }
 
-    function getNoteClass(subjectId) {
-        const s = subjects.find(s => s.id === subjectId);
-        return s ? s.class : "islamic";
-    }
-
     function escapeHtml(str) {
         if (!str) return '';
-        return str.replace(/[&<>]/g, function (m) {
+        return str.replace(/[&<>]/g, function(m) {
             if (m === '&') return '&amp;';
             if (m === '<') return '&lt;';
             if (m === '>') return '&gt;';
@@ -642,7 +671,7 @@
         };
         appData.notes.unshift(newNote);
         saveData();
-        renderSubjectNotes();
+        renderNotesForSubject();
         renderAllNotes();
         showToast("✅ تم إضافة الملاحظة");
         return true;
@@ -654,7 +683,7 @@
             appData.notes[index].title = title.trim();
             appData.notes[index].content = content.trim();
             saveData();
-            renderSubjectNotes();
+            renderNotesForSubject();
             renderAllNotes();
             showToast("✅ تم تحديث الملاحظة");
         }
@@ -663,7 +692,7 @@
     function deleteNote(id) {
         appData.notes = appData.notes.filter(n => n.id !== id);
         saveData();
-        renderSubjectNotes();
+        renderNotesForSubject();
         renderAllNotes();
         showToast("🗑️ تم حذف الملاحظة");
     }
@@ -685,10 +714,11 @@
                 document.getElementById("noteModal").style.display = "flex";
             };
             document.getElementById("deleteNoteBtn").onclick = () => {
-                if (confirm("هل أنت متأكد من حذف هذه الملاحظة؟")) {
+                showConfirm("هل أنت متأكد من حذف هذه الملاحظة؟", () => {
                     deleteNote(note.id);
                     document.getElementById("viewNoteModal").style.display = "none";
-                }
+                    hideConfirm();
+                });
             };
         }
     }
@@ -706,7 +736,7 @@
     document.getElementById("closeNoteModalBtn").onclick = () => document.getElementById("noteModal").style.display = "none";
     document.getElementById("closeViewModalBtn").onclick = () => document.getElementById("viewNoteModal").style.display = "none";
 
-    // ========================== الجدول الأسبوعي ==========================
+    // ========================== الجدول الأسبوعي (مُصلح) ==========================
     function renderWeeklyTable() {
         const thead = document.getElementById("weeklyHeader");
         const tbody = document.getElementById("weeklyBody");
@@ -714,7 +744,7 @@
         
         let headerHtml = `<tr>`;
         for (let i = 0; i < appData.weekHeaders.length; i++) {
-            headerHtml += `<th onclick="editWeekCol(${i})" style="cursor:pointer;">✏️ ${appData.weekHeaders[i]}</th>`;
+            headerHtml += `<th onclick="openEditWeekColModal(${i})" style="cursor:pointer;">✏️ ${appData.weekHeaders[i]}</th>`;
         }
         headerHtml += `<th style="width:60px;"></th></tr>`;
         thead.innerHTML = headerHtml;
@@ -739,16 +769,17 @@
             delBtn.style.background = "#c62828";
             delBtn.style.color = "white";
             delBtn.style.border = "none";
-            delBtn.style.padding = "4px 12px";
+            delBtn.style.padding = "5px 12px";
             delBtn.style.borderRadius = "30px";
             delBtn.onclick = (function(rowIdx) {
                 return function() {
-                    if (confirm("حذف هذا الصف؟")) {
+                    showConfirm("حذف هذا الصف؟", () => {
                         appData.weekPlan.splice(rowIdx, 1);
                         saveData();
                         renderWeeklyTable();
+                        hideConfirm();
                         showToast("✅ تم حذف الصف");
-                    }
+                    });
                 };
             })(i);
             delTd.appendChild(delBtn);
@@ -757,7 +788,7 @@
         }
     }
 
-    window.editWeekCol = function(colIndex) {
+    window.openEditWeekColModal = function(colIndex) {
         const newName = prompt("أدخل الاسم الجديد لهذا اليوم:", appData.weekHeaders[colIndex]);
         if (newName && newName.trim()) {
             appData.weekHeaders[colIndex] = newName.trim();
@@ -784,27 +815,29 @@
 
     function deleteWeekLastRow() {
         if (appData.weekPlan.length <= 1) { showToast("لا يمكن حذف الصف الأخير"); return; }
-        if (confirm("حذف آخر صف في الجدول الأسبوعي؟")) {
+        showConfirm("حذف آخر صف في الجدول الأسبوعي؟", () => {
             appData.weekPlan.pop();
             saveData();
             renderWeeklyTable();
+            hideConfirm();
             showToast("🗑️ تم حذف آخر صف");
-        }
+        });
     }
 
     function deleteWeekLastCol() {
         if (appData.weekHeaders.length <= 1) { showToast("لا يمكن حذف العمود الأخير"); return; }
-        if (confirm("حذف آخر عمود في الجدول الأسبوعي؟")) {
+        showConfirm("حذف آخر عمود في الجدول الأسبوعي؟", () => {
             appData.weekHeaders.pop();
             for (let i = 0; i < appData.weekPlan.length; i++) appData.weekPlan[i].pop();
             saveData();
             renderWeeklyTable();
+            hideConfirm();
             showToast("🗑️ تم حذف آخر عمود");
-        }
+        });
     }
 
     function resetWeekPlan() {
-        if (confirm("إعادة ضبط الجدول الأسبوعي؟")) {
+        showConfirm("إعادة ضبط الجدول الأسبوعي؟", () => {
             appData.weekPlan = [
                 ["مراجعة الفيزياء", "مراجعة الكيمياء", "مراجعة الرياضيات", "مراجعة العربية", "مراجعة الأحياء", "مراجعة الانكليزي", "مراجعة الإسلامية"],
                 ["حل مسائل", "حفظ قوانين", "كتابة تجارب", "اختبارات", "ملخصات", "مشاريع", "تقييم"]
@@ -812,8 +845,9 @@
             appData.weekHeaders = [...weekDays];
             saveData();
             renderWeeklyTable();
+            hideConfirm();
             showToast("🔄 تم إعادة ضبط الجدول الأسبوعي");
-        }
+        });
     }
 
     // ========================== الجدول اليومي ==========================
@@ -821,7 +855,7 @@
         const container = document.getElementById("weekdaysContainer");
         if (!container) return;
         container.innerHTML = weekDaysEn.map((day, idx) => `
-            <div class="weekday-card ${currentDailyDay === day ? 'active' : ''}" onclick="selectDailyDay('${day}')">
+            <div class="weekday-box ${currentDailyDay === day ? 'active' : ''}" onclick="selectDailyDay('${day}')">
                 <div class="weekday-name">${weekDays[idx]}</div>
             </div>
         `).join('');
@@ -844,7 +878,7 @@
         const tbody = document.getElementById("dailyBody");
         let headerHtml = `<tr>`;
         for (let i = 0; i < data.headers.length; i++) {
-            headerHtml += `<th onclick="editDailyCol('${currentDailyDay}',${i})" style="cursor:pointer;">✏️ ${data.headers[i]}</th>`;
+            headerHtml += `<th onclick="openEditDailyColModal('${currentDailyDay}',${i})" style="cursor:pointer;">✏️ ${data.headers[i]}</th>`;
         }
         headerHtml += `<th style="width:60px;"></th></tr>`;
         thead.innerHTML = headerHtml;
@@ -857,8 +891,8 @@
                 td.setAttribute("data-row", i);
                 td.setAttribute("data-col", j);
                 td.innerText = data.rows[i][j] || "";
-                td.addEventListener("blur", (function (r, c, day) {
-                    return function () {
+                td.addEventListener("blur", (function(r, c, day) {
+                    return function() {
                         if (appData.dailyPlans[day] && appData.dailyPlans[day].rows[r]) {
                             appData.dailyPlans[day].rows[r][c] = this.innerText;
                             saveData();
@@ -873,15 +907,17 @@
             delBtn.style.background = "#c62828";
             delBtn.style.color = "white";
             delBtn.style.border = "none";
-            delBtn.style.padding = "4px 10px";
+            delBtn.style.padding = "5px 12px";
             delBtn.style.borderRadius = "30px";
-            delBtn.onclick = (function (rowIdx, day) {
-                return function () {
-                    if (confirm("حذف هذا الصف؟")) {
+            delBtn.onclick = (function(rowIdx, day) {
+                return function() {
+                    showConfirm("حذف هذا الصف؟", () => {
                         appData.dailyPlans[day].rows.splice(rowIdx, 1);
                         saveData();
                         renderDailyTable();
-                    }
+                        hideConfirm();
+                        showToast("✅ تم حذف الصف");
+                    });
                 };
             })(i, currentDailyDay);
             delTd.appendChild(delBtn);
@@ -890,12 +926,13 @@
         }
     }
 
-    window.editDailyCol = function (day, colIndex) {
+    window.openEditDailyColModal = function(day, colIndex) {
         const newName = prompt("أدخل الاسم الجديد للعمود:", appData.dailyPlans[day].headers[colIndex]);
         if (newName && newName.trim()) {
             appData.dailyPlans[day].headers[colIndex] = newName.trim();
             saveData();
             renderDailyTable();
+            showToast("✅ تم تعديل اسم العمود");
         }
     };
 
@@ -917,32 +954,38 @@
 
     function deleteDailyLastRow() {
         if (appData.dailyPlans[currentDailyDay].rows.length <= 1) { showToast("لا يمكن حذف الصف الأخير"); return; }
-        if (confirm("حذف آخر صف؟")) {
+        showConfirm("حذف آخر صف في الجدول اليومي؟", () => {
             appData.dailyPlans[currentDailyDay].rows.pop();
             saveData();
             renderDailyTable();
-        }
+            hideConfirm();
+            showToast("🗑️ تم حذف آخر صف");
+        });
     }
 
     function deleteDailyLastCol() {
         if (appData.dailyPlans[currentDailyDay].headers.length <= 1) { showToast("لا يمكن حذف العمود الأخير"); return; }
-        if (confirm("حذف آخر عمود؟")) {
+        showConfirm("حذف آخر عمود في الجدول اليومي؟", () => {
             appData.dailyPlans[currentDailyDay].headers.pop();
             for (let i = 0; i < appData.dailyPlans[currentDailyDay].rows.length; i++) appData.dailyPlans[currentDailyDay].rows[i].pop();
             saveData();
             renderDailyTable();
-        }
+            hideConfirm();
+            showToast("🗑️ تم حذف آخر عمود");
+        });
     }
 
     function resetDailyTable() {
-        if (confirm("إعادة ضبط جدول هذا اليوم؟")) {
+        showConfirm("إعادة ضبط جدول هذا اليوم؟", () => {
             appData.dailyPlans[currentDailyDay] = {
                 headers: ["الساعة", "النشاط", "المدة"],
                 rows: hoursOfDay.slice(0, 12).map(h => [h, "", ""])
             };
             saveData();
             renderDailyTable();
-        }
+            hideConfirm();
+            showToast("🔄 تم إعادة ضبط الجدول اليومي");
+        });
     }
 
     // ========================== الصلاة ==========================
@@ -972,8 +1015,8 @@
             const row = document.createElement("div");
             row.className = "prayer-row";
             row.innerHTML = `
-                <span>🕌 ${p.name}</span>
-                <span>${p.time}</span>
+                <span style="font-weight: bold;">🕌 ${p.name}</span>
+                <span style="font-weight: bold;">${p.time}</span>
                 <div class="prayer-check ${completed ? 'completed' : ''}" data-prayer="${p.key}"><span>${completed ? '✓' : ''}</span></div>
             `;
             row.querySelector('.prayer-check').onclick = () => {
@@ -985,22 +1028,26 @@
         });
         const completedCount = Object.values(appData.prayerStatus).filter(v => v).length;
         const prog = document.createElement("div");
-        prog.style.marginTop = "10px";
+        prog.style.marginTop = "12px";
         prog.style.textAlign = "center";
-        prog.style.padding = "8px";
+        prog.style.padding = "10px";
         prog.style.background = "#e9dbba";
-        prog.style.borderRadius = "30px";
+        prog.style.borderRadius = "35px";
+        prog.style.fontWeight = "bold";
         prog.innerHTML = `📊 تقدم الصلوات: ${completedCount}/5`;
         container.appendChild(prog);
         document.getElementById("seasonBadge").innerHTML = currentSeason.season;
+        document.getElementById("nextAdhanAlert").innerHTML = "🔔 الأذان القادم: المغرب 18:45";
     }
 
     function resetPrayers() {
-        if (confirm("إعادة تعيين صلوات اليوم؟")) {
+        showConfirm("إعادة تعيين صلوات اليوم؟", () => {
             appData.prayerStatus = { fajr: false, dhuhr: false, asr: false, maghrib: false, isha: false };
             saveData();
             renderPrayers();
-        }
+            hideConfirm();
+            showToast("🔄 تم إعادة تعيين الصلوات");
+        });
     }
 
     // ========================== الإنجازات ==========================
@@ -1014,7 +1061,7 @@
             sorted.sort((a, b) => a.timestamp - b.timestamp);
         }
         if (sorted.length === 0) {
-            container.innerHTML = '<div style="text-align:center; padding:20px;">لا توجد إنجازات بعد</div>';
+            container.innerHTML = '<div style="text-align: center; padding: 30px;">لا توجد إنجازات بعد</div>';
             return;
         }
         container.innerHTML = sorted.map(item => `<div class="history-item"><div class="history-subject">✅ ${item.subject}</div><div class="history-date">📅 ${item.date}</div></div>`).join('');
@@ -1028,11 +1075,13 @@
     }
 
     function clearHistory() {
-        if (confirm("مسح سجل الإنجازات؟")) {
+        showConfirm("مسح سجل الإنجازات؟", () => {
             appData.historyLog = [];
             saveData();
             renderHistory();
-        }
+            hideConfirm();
+            showToast("🗑️ تم مسح سجل الإنجازات");
+        });
     }
 
     // ========================== الأهداف ==========================
@@ -1066,7 +1115,7 @@
     }
 
     function resetAchievementsOnly() {
-        if (confirm("⚠️ إعادة ضبط المواد المكتملة والنقاط؟\n(لن يتم مسح سجل الإنجازات)")) {
+        showConfirm("⚠️ إعادة ضبط المواد المكتملة والنقاط؟\n(لن يتم مسح سجل الإنجازات)", () => {
             appData.points = 0;
             subjects.forEach(s => appData.completed[s.name] = false);
             appData.dailyCompleted = [];
@@ -1075,14 +1124,16 @@
             saveData();
             updateUI();
             showMaterialTable(currentSubject.id, currentSubject.name);
-        }
+            hideConfirm();
+            showToast("🔄 تم إعادة ضبط المواد والنقاط");
+        });
     }
 
     function resetEverything() {
-        if (confirm("⚠️ تحذير نهائي: إعادة تعيين كل شيء؟\nهذا سيحذف جميع بياناتك!")) {
+        showConfirm("⚠️ تحذير نهائي: إعادة تعيين كل شيء؟\nهذا سيحذف جميع بياناتك!", () => {
             localStorage.removeItem("babelAppData");
             location.reload();
-        }
+        });
     }
 
     // ========================== المؤقت ==========================
@@ -1111,13 +1162,13 @@
                 }
             }
         }, 1000);
-        showToast("بدء المؤقت");
+        showToast("⏳ بدأ المؤقت");
     }
 
     function pauseTimer() {
         if (timerInterval) clearInterval(timerInterval);
         timerRunning = false;
-        showToast("إيقاف المؤقت");
+        showToast("⏸️ إيقاف المؤقت");
     }
 
     function resetTimer() {
@@ -1125,7 +1176,7 @@
         timerRunning = false;
         timerSeconds = 0;
         updateTimerDisplay();
-        showToast("تصفير المؤقت");
+        showToast("🔄 تصفير المؤقت");
     }
 
     function setTimer(minutes) {
@@ -1136,13 +1187,14 @@
         showToast(`⏰ تم ضبط المؤقت على ${minutes} دقيقة`);
     }
 
+    // ========================== عرض جدول المادة ==========================
     function showMaterialTable(id, name) {
         currentSubject = { id, name };
-        const container = document.getElementById("tableContainer");
+        const container = document.getElementById("materialTableContainer");
         const data = appData.customTables[id];
         if (!data) return;
-        let html = `<h3>📘 جدول ${name} (قابل للتخصيص)</h3>
-                    <table class="custom-table">
+        let html = `<h3 style="margin-bottom: 10px;">📘 جدول ${name} (قابل للتخصيص)</h3>
+                    <table class="material-table">
                         <thead><tr>`;
         for (let j = 0; j < data.headers.length; j++) {
             html += `<th onclick="openEditColumnModal('${id}',${j})" style="cursor:pointer;">✏️ ${data.headers[j]}</th>`;
@@ -1153,26 +1205,26 @@
             for (let j = 0; j < data.headers.length; j++) {
                 html += `<td class="editable-cell" contenteditable="true" data-row="${i}" data-col="${j}" data-table="${id}">${data.rows[i][j] || ''}</td>`;
             }
-            html += `<td><button class="delete-row-btn" data-row="${i}" style="background:#c62828; color:white; border:none; padding:2px 8px; border-radius:30px;">🗑️</button><\/td><\/tr>`;
+            html += `<td><button class="delete-row-btn" data-row="${i}" style="background:#c62828; color:white; border:none; padding:4px 10px; border-radius:30px;">🗑️</button><\/td><\/tr>`;
         }
         html += `</tbody>
                     </table>
-                    <div class="table-controls">
-                        <button onclick="addTableRow('${id}')" style="background:#4caf50; color:white;">➕ إضافة صف</button>
-                        <button onclick="addTableCol('${id}')" style="background:#2196f3; color:white;">➕ إضافة عمود</button>
-                        <button onclick="deleteLastTableRow('${id}')" style="background:#ff9800; color:white;">🗑️ حذف آخر صف</button>
-                        <button onclick="deleteLastTableCol('${id}')" style="background:#c62828; color:white;">🗑️ حذف آخر عمود</button>
-                        <button onclick="resetTable('${id}')" style="background:#7f5539; color:white;">🔄 إعادة ضبط</button>
+                    <div class="table-buttons">
+                        <button onclick="addMaterialRow('${id}')" class="btn-primary">➕ إضافة صف</button>
+                        <button onclick="addMaterialCol('${id}')" class="btn-primary">➕ إضافة عمود</button>
+                        <button onclick="deleteLastMaterialRow('${id}')" class="btn-warning">🗑️ حذف آخر صف</button>
+                        <button onclick="deleteLastMaterialCol('${id}')" class="btn-danger">🗑️ حذف آخر عمود</button>
+                        <button onclick="resetMaterialTable('${id}')" class="btn-secondary">🔄 إعادة ضبط</button>
                     </div>`;
         container.innerHTML = html;
-        attachTableEvents(id);
-        renderSubjectNotes();
+        attachMaterialEvents(id);
+        renderNotesForSubject();
         document.querySelectorAll(".tab-btn").forEach(btn => btn.classList.remove("active"));
         const activeTab = Array.from(document.querySelectorAll(".tab-btn")).find(btn => btn.innerText === name);
         if (activeTab) activeTab.classList.add("active");
     }
 
-    function attachTableEvents(id) {
+    function attachMaterialEvents(id) {
         document.querySelectorAll(`.editable-cell[data-table="${id}"]`).forEach(cell => {
             cell.removeEventListener("blur", cell._handler);
             cell._handler = function () {
@@ -1188,59 +1240,17 @@
             btn.removeEventListener("click", btn._clickHandler);
             btn._clickHandler = () => {
                 let row = parseInt(btn.getAttribute("data-row"));
-                if (confirm("هل تريد حذف هذا الصف؟")) {
+                showConfirm("هل تريد حذف هذا الصف؟", () => {
                     appData.customTables[id].rows.splice(row, 1);
                     if (appData.customTables[id].rows.length === 0) appData.customTables[id].rows = [["", "", ""]];
                     saveData();
                     showMaterialTable(id, subjects.find(s => s.id === id).name);
-                }
+                    hideConfirm();
+                });
             };
             btn.addEventListener("click", btn._clickHandler);
         });
     }
-
-    window.addTableRow = function (id) {
-        appData.customTables[id].rows.push(Array(appData.customTables[id].headers.length).fill(""));
-        saveData();
-        showMaterialTable(id, subjects.find(s => s.id === id).name);
-    };
-
-    window.addTableCol = function (id) {
-        appData.customTables[id].headers.push("عمود جديد");
-        for (let i = 0; i < appData.customTables[id].rows.length; i++) appData.customTables[id].rows[i].push("");
-        saveData();
-        showMaterialTable(id, subjects.find(s => s.id === id).name);
-    };
-
-    window.deleteLastTableRow = function (id) {
-        if (appData.customTables[id].rows.length <= 1) { showToast("لا يمكن حذف الصف الأخير"); return; }
-        if (confirm("حذف آخر صف في جدول هذه المادة؟")) {
-            appData.customTables[id].rows.pop();
-            saveData();
-            showMaterialTable(id, subjects.find(s => s.id === id).name);
-        }
-    };
-
-    window.deleteLastTableCol = function (id) {
-        if (appData.customTables[id].headers.length <= 1) { showToast("لا يمكن حذف العمود الأخير"); return; }
-        if (confirm("حذف آخر عمود في جدول هذه المادة؟")) {
-            appData.customTables[id].headers.pop();
-            for (let i = 0; i < appData.customTables[id].rows.length; i++) appData.customTables[id].rows[i].pop();
-            saveData();
-            showMaterialTable(id, subjects.find(s => s.id === id).name);
-        }
-    };
-
-    window.resetTable = function (id) {
-        if (confirm("إعادة ضبط جدول هذه المادة؟")) {
-            appData.customTables[id] = {
-                headers: ["الموضوع", "المهمة", "ملاحظات"],
-                rows: [["الوحدة الأولى", "قراءة وفهم", "حل الأسئلة"], ["الوحدة الثانية", "مراجعة وحفظ", "اختبار"]]
-            };
-            saveData();
-            showMaterialTable(id, subjects.find(s => s.id === id).name);
-        }
-    };
 
     window.openEditColumnModal = function (id, colIndex) {
         document.getElementById("newColumnName").value = appData.customTables[id].headers[colIndex];
@@ -1260,6 +1270,57 @@
     };
     document.getElementById("closeColumnModalBtn").onclick = () => document.getElementById("editColumnModal").style.display = "none";
 
+    window.addMaterialRow = function (id) {
+        appData.customTables[id].rows.push(Array(appData.customTables[id].headers.length).fill(""));
+        saveData();
+        showMaterialTable(id, subjects.find(s => s.id === id).name);
+        showToast("➕ تم إضافة صف");
+    };
+
+    window.addMaterialCol = function (id) {
+        appData.customTables[id].headers.push("عمود جديد");
+        for (let i = 0; i < appData.customTables[id].rows.length; i++) appData.customTables[id].rows[i].push("");
+        saveData();
+        showMaterialTable(id, subjects.find(s => s.id === id).name);
+        showToast("➕ تم إضافة عمود");
+    };
+
+    window.deleteLastMaterialRow = function (id) {
+        if (appData.customTables[id].rows.length <= 1) { showToast("لا يمكن حذف الصف الأخير"); return; }
+        showConfirm("حذف آخر صف في جدول هذه المادة؟", () => {
+            appData.customTables[id].rows.pop();
+            saveData();
+            showMaterialTable(id, subjects.find(s => s.id === id).name);
+            hideConfirm();
+            showToast("🗑️ تم حذف آخر صف");
+        });
+    };
+
+    window.deleteLastMaterialCol = function (id) {
+        if (appData.customTables[id].headers.length <= 1) { showToast("لا يمكن حذف العمود الأخير"); return; }
+        showConfirm("حذف آخر عمود في جدول هذه المادة؟", () => {
+            appData.customTables[id].headers.pop();
+            for (let i = 0; i < appData.customTables[id].rows.length; i++) appData.customTables[id].rows[i].pop();
+            saveData();
+            showMaterialTable(id, subjects.find(s => s.id === id).name);
+            hideConfirm();
+            showToast("🗑️ تم حذف آخر عمود");
+        });
+    };
+
+    window.resetMaterialTable = function (id) {
+        showConfirm("إعادة ضبط جدول هذه المادة؟", () => {
+            appData.customTables[id] = {
+                headers: ["الموضوع", "المهمة", "ملاحظات"],
+                rows: [["الوحدة الأولى", "قراءة وفهم", "حل الأسئلة"], ["الوحدة الثانية", "مراجعة وحفظ", "اختبار"]]
+            };
+            saveData();
+            showMaterialTable(id, subjects.find(s => s.id === id).name);
+            hideConfirm();
+            showToast("🔄 تم إعادة ضبط الجدول");
+        });
+    };
+
     // ========================== تحديث الواجهة ==========================
     function updateUI() {
         updateGoalsUI();
@@ -1271,7 +1332,7 @@
         renderDailyTable();
         renderPrayers();
         renderAllNotes();
-        renderSubjectNotes();
+        renderNotesForSubject();
     }
 
     function tasbeehClick(id) {
@@ -1286,7 +1347,7 @@
         appData.tasbeeh[id - 1] = 0;
         saveData();
         document.getElementById(`tasbeeh${id}`).innerText = "0";
-        showToast(`تم تصفير العداد`);
+        showToast(`🔄 تم تصفير العداد`);
     }
 
     // ========================== تشغيل التطبيق ==========================
@@ -1348,10 +1409,21 @@
 
         document.getElementById("saveSettingsBtn").onclick = () => {
             timerAlert = document.getElementById("timerSoundEnable").value === "yes";
+            const adhanEnabled = document.getElementById("adhanEnable").value === "yes";
             showToast("تم حفظ الإعدادات");
         };
         document.getElementById("timerSoundEnable").value = "yes";
         document.getElementById("adhanEnable").value = "yes";
+
+        document.getElementById("confirmYesBtn").onclick = () => {
+            if (pendingConfirmCallback) {
+                pendingConfirmCallback();
+                hideConfirm();
+            } else {
+                hideConfirm();
+            }
+        };
+        document.getElementById("confirmNoBtn").onclick = () => hideConfirm();
 
         document.querySelectorAll(".menu-btn").forEach(btn => {
             btn.onclick = () => {
