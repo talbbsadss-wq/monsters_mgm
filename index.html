@@ -14,8 +14,22 @@
         .menu-btn.active { background: #f3b33d; color: #1e3a1e; }
         .menu-btn:active { transform: scale(0.95); }
         
-        .stats-header { background: #2c5530; padding: 10px 20px; display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; color: white; }
+        .stats-header { background: #2c5530; padding: 10px 20px; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 12px; color: white; }
         .stat-badge { background: rgba(0,0,0,0.4); padding: 5px 15px; border-radius: 40px; font-size: 0.8rem; font-weight: bold; }
+        
+        /* زر ابدأ يومك بسم الله */
+        .reset-day-btn {
+            background: #f3b33d;
+            color: #1e3a1e;
+            border: none;
+            padding: 6px 18px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.1s;
+        }
+        .reset-day-btn:active { transform: scale(0.95); }
         
         .tasbeeh-container { background: #1e3a2a; padding: 10px; border-bottom: 2px solid #f3b33d; }
         .tasbeeh-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
@@ -59,7 +73,6 @@
         .editable-cell:focus { background: #ffe0a3; outline: 2px solid #f3b33d; }
         .table-buttons { display: flex; gap: 10px; justify-content: center; margin-top: 12px; flex-wrap: wrap; }
         
-        /* الجدول الأسبوعي - مُصلح */
         .week-table { width: 100%; border-collapse: collapse; background: white; border-radius: 20px; overflow: hidden; }
         .week-table th, .week-table td { border: 1px solid #c0a86a; padding: 12px; font-size: 0.8rem; text-align: center; background: #fffef5; }
         .week-table th { background: #e9dbba; font-weight: bold; cursor: pointer; }
@@ -74,7 +87,6 @@
         .weekday-box.active { background: linear-gradient(135deg, #f3b33d, #ff9800); border-color: #fff; }
         .weekday-name { font-weight: bold; color: white; font-size: 0.85rem; }
         
-        /* الملاحظات */
         .notes-wrapper { margin-top: 20px; border-top: 2px dashed #e0d0aa; padding-top: 15px; }
         .notes-title { color: #2a5c3e; font-size: 0.9rem; margin-bottom: 10px; font-weight: bold; }
         .note-box { background: white; border-radius: 20px; margin-bottom: 10px; padding: 12px; border-right: 5px solid; cursor: pointer; transition: 0.1s; }
@@ -164,6 +176,7 @@
         <span class="stat-badge">📅 أسبوعي: <span id="weeklyCount">0</span>/<span id="weeklyTarget">5</span></span>
         <span class="stat-badge">🌙 شهري: <span id="monthlyCount">0</span>/<span id="monthlyTarget">20</span></span>
         <span class="stat-badge">🎯 اليوم: <span id="dailyCount">0</span>/<span id="dailyTarget">3</span></span>
+        <button id="resetDayBtn" class="reset-day-btn">🤲 ابدأ يومك بسم الله</button>
     </div>
 
     <div class="tips-bar"><div class="tips-text" id="tipsText">🌟 سبحان الله وبحمده • سبحان الله العظيم</div></div>
@@ -195,7 +208,6 @@
         <div id="notesWrapper" class="notes-wrapper"></div>
     </div>
 
-    <!-- الجدول الأسبوعي - مُصلح -->
     <div id="weeklyPage" class="page">
         <h4>📅 خطتي الأسبوعية (اضغط على أي خلية لتعديل النص)</h4>
         <div style="overflow-x: auto;">
@@ -496,32 +508,28 @@
         if (!appData.tasbeeh) appData.tasbeeh = [0, 0, 0, 0, 0];
     }
 
-    // ========================== تصفير منتصف الليل (المشكلة الأساسية) ==========================
-    function checkMidnightReset() {
-        const today = new Date().toLocaleDateString('en-CA');
-        if (today !== lastDate) {
-            lastDate = today;
-            
-            // ✅ تصفير المواد المكتملة فقط - هذا هو المطلوب
+    // ========================== زر ابدأ يومك بسم الله ==========================
+    function resetCompletedMaterials() {
+        showConfirm("🤲 بسم الله الرحمن الرحيم\nهل تريد إعادة ضبط المواد المكتملة فقط؟\n(سيتم إزالة علامات الصح فقط، ولن يتم مسح النقاط أو سجل الإنجازات)", () => {
+            // إعادة تعيين المواد المكتملة فقط (علامات الصح)
             subjects.forEach(s => { 
                 appData.completed[s.name] = false; 
             });
             
-            // تصفير المهام اليومية
+            // إعادة تعيين المهام اليومية
             appData.dailyCompleted = [];
             
-            // تصفير الصلوات
-            appData.prayerStatus = { fajr: false, dhuhr: false, asr: false, maghrib: false, isha: false };
-            
-            // ✅ الحفاظ على النقاط وسجل الإنجازات والأهداف الأسبوعية والشهرية
-            // لا يتم تصفيرها
+            // ✅ الحفاظ على النقاط
+            // ✅ الحفاظ على سجل الإنجازات (historyLog)
+            // ✅ الحفاظ على الأهداف الأسبوعية والشهرية
+            // ✅ الحفاظ على الملاحظات والجداول
             
             saveData();
             updateUI();
             showMaterialTable(currentSubject.id, currentSubject.name);
-            showToast("🕛 منتصف الليل: تم تصفير المواد والمهام اليومية والصلوات");
-        }
-        setTimeout(checkMidnightReset, 60000);
+            hideConfirm();
+            showToast("🤲 بسم الله... تم إعادة ضبط المواد المكتملة بنجاح، ابدأ يومك الجديد!");
+        });
     }
 
     // ========================== المواد والجداول ==========================
@@ -736,7 +744,7 @@
     document.getElementById("closeNoteModalBtn").onclick = () => document.getElementById("noteModal").style.display = "none";
     document.getElementById("closeViewModalBtn").onclick = () => document.getElementById("viewNoteModal").style.display = "none";
 
-    // ========================== الجدول الأسبوعي (مُصلح) ==========================
+    // ========================== الجدول الأسبوعي ==========================
     function renderWeeklyTable() {
         const thead = document.getElementById("weeklyHeader");
         const tbody = document.getElementById("weeklyBody");
@@ -1193,7 +1201,7 @@
         const container = document.getElementById("materialTableContainer");
         const data = appData.customTables[id];
         if (!data) return;
-        let html = `<h3 style="margin-bottom: 10px;">📘 جدول ${name} (قابل للتخصيص)</h3>
+        let html = `<h3 style="margin-bottom: 10px;">📘 جدول ${name}</h3>
                     <table class="material-table">
                         <thead><tr>`;
         for (let j = 0; j < data.headers.length; j++) {
@@ -1298,7 +1306,7 @@
 
     window.deleteLastMaterialCol = function (id) {
         if (appData.customTables[id].headers.length <= 1) { showToast("لا يمكن حذف العمود الأخير"); return; }
-        showConfirm("حذف آخر عمود في جدول هذه المادة؟", () => {
+        showConfirm("حذف آخر عمود في جدول هذه المادة？", () => {
             appData.customTables[id].headers.pop();
             for (let i = 0; i < appData.customTables[id].rows.length; i++) appData.customTables[id].rows[i].pop();
             saveData();
@@ -1407,6 +1415,9 @@
         document.getElementById("sortNotesNewest").onclick = () => setNotesOrder("newest");
         document.getElementById("sortNotesOldest").onclick = () => setNotesOrder("oldest");
 
+        // زر ابدأ يومك بسم الله
+        document.getElementById("resetDayBtn").onclick = resetCompletedMaterials;
+
         document.getElementById("saveSettingsBtn").onclick = () => {
             timerAlert = document.getElementById("timerSoundEnable").value === "yes";
             const adhanEnabled = document.getElementById("adhanEnable").value === "yes";
@@ -1445,7 +1456,8 @@
         setTimer(25);
         showMaterialTable("physics", "الفيزياء");
         updateUI();
-        checkMidnightReset();
+        // تعطيل التصفير التلقائي عند منتصف الليل واستبداله بزر ابدأ يومك
+        // checkMidnightReset(); // تم تعطيلها
     });
 </script>
 </body>
